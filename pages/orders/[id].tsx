@@ -18,7 +18,7 @@ const OrderDetail: NextPage<OrderDetailProps> = ({ order }) => {
     <div className="min-h-screen bg-gray-50">
       <header>
         <div className="container mx-auto px-4 py-6 flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-gray-800">Order Details</h1>
+          <h1 className="text-3xl font-bold text-gray-800">🛒 Order Details</h1>
           <Link
             href="/orders"
             className="inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300"
