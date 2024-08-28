@@ -1,17 +1,19 @@
-import { NextPage, GetServerSideProps } from "next";
+import { NextPage, GetStaticProps, GetStaticPaths } from "next";
 import Link from "next/link";
 import path from "path";
 import fs from "fs";
 import OrderSummary from "../../components/OrderSummary";
 import { Order } from "../../types/Order";
-import { Store } from "../../types/Store";
 
 interface OrderDetailProps {
   order: Order;
-  store: Store;
 }
 
-const OrderDetail: NextPage<OrderDetailProps> = ({ order, store }) => {
+const OrderDetail: NextPage<OrderDetailProps> = ({ order }) => {
+  if (!order) {
+    return <div>Order not found</div>;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <header>
@@ -28,51 +30,49 @@ const OrderDetail: NextPage<OrderDetailProps> = ({ order, store }) => {
 
       <main className="container mx-auto px-4 py-8">
         <div className="bg-white shadow rounded-lg overflow-hidden">
-          <OrderSummary order={order} store={store} />
+          <OrderSummary order={order} />
         </div>
       </main>
     </div>
   );
 };
 
-export const getServerSideProps: GetServerSideProps<OrderDetailProps> = async (
-  context
-) => {
-  const { id } = context.params as { id: string };
-
-  // Load orders
+export const getStaticPaths: GetStaticPaths = async () => {
   const ordersFilePath = path.join(
     process.cwd(),
     "public",
     "data",
     "orders.json"
   );
-  const ordersFileContent = fs.readFileSync(ordersFilePath, "utf8");
-  const orders: Order[] = JSON.parse(ordersFileContent);
-  const order = orders.find((o) => o.id === id);
+  const ordersFileContents = fs.readFileSync(ordersFilePath, "utf8");
+  const orders: Order[] = JSON.parse(ordersFileContents);
 
-  if (!order) {
-    console.error(`Order with id ${id} not found.`);
-    return { notFound: true };
-  }
+  const paths = orders.map((order) => ({
+    params: { id: order.id },
+  }));
 
-  // Load stores
-  const storesFilePath = path.join(
+  return { paths, fallback: false };
+};
+
+export const getStaticProps: GetStaticProps<OrderDetailProps> = async ({
+  params,
+}) => {
+  const ordersFilePath = path.join(
     process.cwd(),
     "public",
     "data",
-    "stores.json"
+    "orders.json"
   );
-  const storesFileContent = fs.readFileSync(storesFilePath, "utf8");
-  const stores: Store[] = JSON.parse(storesFileContent);
-  const store = stores.find((s) => s.name === order.storeName); // Use store name to find the store
+  const ordersFileContents = fs.readFileSync(ordersFilePath, "utf8");
+  const orders: Order[] = JSON.parse(ordersFileContents);
 
-  if (!store) {
-    console.error(`Store with name ${order.storeName} not found.`);
+  const order = orders.find((o) => o.id === params?.id);
+
+  if (!order) {
     return { notFound: true };
   }
 
-  return { props: { order, store } };
+  return { props: { order } };
 };
 
 export default OrderDetail;

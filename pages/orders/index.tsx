@@ -1,9 +1,8 @@
-import { NextPage, GetServerSideProps } from "next";
+import { NextPage, GetStaticProps } from "next";
+import Link from "next/link";
 import path from "path";
 import fs from "fs";
-import Link from "next/link";
 import { Order } from "../../types/Order";
-import { Store } from "../../types/Store";
 
 interface OrdersProps {
   orders: Order[];
@@ -19,7 +18,7 @@ const OrderStatusColor: { [key: string]: string } = {
 
 const Orders: NextPage<OrdersProps> = ({ orders }) => {
   return (
-    <div className="container mx-auto px-4 py-8 bg-gray-50 min-h-screen">
+    <div className="container mx-auto px-4 py-8 min-h-screen">
       <h1 className="text-4xl font-bold mb-8 text-gray-800"> 🏷️ Your Orders</h1>
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {orders.map((order) => (
@@ -62,39 +61,18 @@ const Orders: NextPage<OrdersProps> = ({ orders }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps<OrdersProps> = async () => {
+export const getStaticProps: GetStaticProps<OrdersProps> = async () => {
   const ordersFilePath = path.join(
     process.cwd(),
     "public",
     "data",
     "orders.json"
   );
-  const ordersFileContent = fs.readFileSync(ordersFilePath, "utf8");
-  const orders: Order[] = JSON.parse(ordersFileContent);
-
-  const storesFilePath = path.join(
-    process.cwd(),
-    "public",
-    "data",
-    "stores.json"
-  );
-  const storesFileContent = fs.readFileSync(storesFilePath, "utf8");
-  const stores: Store[] = JSON.parse(storesFileContent);
-
-  // Map stores by their name for quick lookup
-  const storeMap = new Map(stores.map((store) => [store.name, store]));
-
-  // Augment orders with store information
-  const ordersWithStoreNames = orders.map((order) => {
-    const store = storeMap.get(order.storeName);
-    return {
-      ...order,
-      storeName: store ? store.name : "Unknown Store",
-    };
-  });
+  const ordersFileContents = fs.readFileSync(ordersFilePath, "utf8");
+  const orders: Order[] = JSON.parse(ordersFileContents);
 
   return {
-    props: { orders: ordersWithStoreNames },
+    props: { orders },
   };
 };
 

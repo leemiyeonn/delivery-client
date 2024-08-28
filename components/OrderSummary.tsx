@@ -2,17 +2,23 @@ import React from "react";
 import { OrderSummary as OrderSummaryType } from "../types/OrderSummary";
 import { OrderProduct } from "../types/OrderProduct";
 
-type OrderSummaryProps = OrderSummaryType;
+type OrderSummaryProps = Omit<OrderSummaryType, "store"> & {
+  store?: OrderSummaryType["store"];
+};
 
 const OrderSummary: React.FC<OrderSummaryProps> = ({ order, store }) => {
   return (
     <>
       <div className="p-6 mb-6 rounded-lg shadow-md border border-gray-200">
-        <h2 className="text-2xl font-bold mb-4">Order from {store.name}</h2>
+        <h2 className="text-2xl font-bold mb-4">
+          Order from {store ? store.name : order.storeName}
+        </h2>
         <p className="text-gray-700 mb-2">Order ID: {order.id}</p>
         <p className="text-gray-700 mb-2">Store: {order.storeName}</p>
         <p className="text-gray-700 mb-2">Status: {order.status}</p>
-        <p className="text-gray-700 mb-2">Order Date: {order.orderDate}</p>
+        <p className="text-gray-700 mb-2">
+          Order Date: {new Date(order.orderDate).toLocaleString()}
+        </p>
       </div>
 
       <div className="p-6 mb-6 rounded-lg shadow-md border border-gray-200">
