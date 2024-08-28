@@ -1,71 +1,71 @@
 [
   {
     "id": "1",
-    "storeName": "Bella Italia",
+    "storeName": "Pasta Paradise",
     "products": [
       {
-        "id": "1",
-        "name": "Margherita Pizza",
-        "description": "Classic pizza with fresh mozzarella and basil.",
-        "price": 14.0,
-        "image": "/images/margherita_pizza.jpg"
+        "id": "5",
+        "name": "Spaghetti Carbonara",
+        "description": "Pasta with creamy egg sauce and pancetta.",
+        "price": 15.0,
+        "quantity": 1
       },
       {
-        "id": "2",
-        "name": "Lasagna",
-        "description": "Layers of pasta with meat and cheese.",
-        "price": 18.0,
-        "image": "/images/lasagna.jpg"
+        "id": "6",
+        "name": "Fettuccine Alfredo",
+        "description": "Fettuccine pasta in a rich Alfredo sauce.",
+        "price": 16.0,
+        "quantity": 1
       }
     ],
-    "total": 32.0,
-    "status": "Pending",
-    "orderDate": "2024-08-20T15:30:00Z"
+    "total": 31.0,
+    "status": "Shipped",
+    "orderDate": "2024-08-23T16:00:00Z"
   },
   {
     "id": "2",
-    "storeName": "Dynasty Chinese",
+    "storeName": "Sushi World",
     "products": [
       {
-        "id": "1",
-        "name": "General Tso's Chicken",
-        "description": "Spicy and sweet chicken with vegetables.",
-        "price": 13.0,
-        "image": "/images/general_tso_chicken.jpg"
+        "id": "17",
+        "name": "Salmon Sushi",
+        "description": "Fresh salmon slices over vinegared rice.",
+        "price": 12.0,
+        "quantity": 1
       },
       {
-        "id": "3",
-        "name": "Spring Rolls",
-        "description": "Crispy rolls filled with vegetables.",
-        "price": 6.0,
-        "image": "/images/spring_rolls.jpg"
+        "id": "19",
+        "name": "Tempura",
+        "description": "Crispy fried shrimp and vegetables.",
+        "price": 10.0,
+        "quantity": 1
       }
     ],
-    "total": 19.0,
-    "status": "Shipped",
-    "orderDate": "2024-08-21T10:00:00Z"
+    "total": 22.0,
+    "status": "Delivered",
+    "orderDate": "2024-08-24T14:30:00Z"
   },
   {
     "id": "3",
-    "storeName": "Seoul Garden",
+    "storeName": "El Camino",
     "products": [
       {
-        "id": "1",
-        "name": "Bulgogi",
-        "description": "Marinated beef grilled to perfection.",
-        "price": 16.0,
-        "image": "/images/bulgogi.jpg"
+        "id": "41",
+        "name": "Fish Tacos",
+        "description": "Grilled fish with cabbage slaw and creamy sauce in a tortilla.",
+        "price": 9.0,
+        "quantity": 1
       },
       {
-        "id": "3",
-        "name": "Bibimbap",
-        "description": "Mixed rice with vegetables and a fried egg.",
-        "price": 12.0,
-        "image": "/images/bibimbap.jpg"
+        "id": "42",
+        "name": "Mexican Street Corn",
+        "description": "Corn on the cob with mayo, cheese, and chili powder.",
+        "price": 5.0,
+        "quantity": 1
       }
     ],
-    "total": 28.0,
-    "status": "Delivered",
-    "orderDate": "2024-08-22T12:45:00Z"
+    "total": 14.0,
+    "status": "Pending",
+    "orderDate": "2024-08-25T11:00:00Z"
   }
 ]

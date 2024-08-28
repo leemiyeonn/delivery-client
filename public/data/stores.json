@@ -1,469 +1,431 @@
 [
   {
-    "id": "1",
-    "name": "Bella Italia",
-    "category": "Italian",
-    "description": "Traditional Italian cuisine with a modern twist.",
+    "stores": [
+      {
+        "id": "1",
+        "name": "Bella Italia",
+        "category": "Italian",
+        "description": "Traditional Italian cuisine with a modern twist."
+      },
+      {
+        "id": "2",
+        "name": "Pasta Paradise",
+        "category": "Italian",
+        "description": "Authentic pasta dishes with a variety of sauces."
+      },
+      {
+        "id": "3",
+        "name": "Ristorante Roma",
+        "category": "Italian",
+        "description": "Fine dining with classic Italian dishes."
+      },
+      {
+        "id": "4",
+        "name": "Tuscan Table",
+        "category": "Italian",
+        "description": "Rustic Tuscan cuisine in a cozy atmosphere."
+      },
+      {
+        "id": "5",
+        "name": "Mediterraneo",
+        "category": "Italian",
+        "description": "Mediterranean-inspired Italian dishes with fresh ingredients."
+      }
+    ],
     "products": [
       {
         "id": "1",
+        "storeId": "1",
         "name": "Margherita Pizza",
         "description": "Classic pizza with fresh mozzarella and basil.",
-        "price": 14.0,
-        "image": "/images/margherita_pizza.jpg"
+        "price": 14.0
       },
       {
         "id": "2",
+        "storeId": "1",
         "name": "Lasagna",
         "description": "Layers of pasta with meat and cheese.",
-        "price": 18.0,
-        "image": "/images/lasagna.jpg"
+        "price": 18.0
       },
       {
         "id": "3",
+        "storeId": "1",
         "name": "Tiramisu",
         "description": "Delicious Italian coffee-flavored dessert.",
-        "price": 7.0,
-        "image": "/images/tiramisu.jpg"
+        "price": 7.0
       },
       {
         "id": "4",
+        "storeId": "1",
         "name": "Bruschetta",
         "description": "Toasted bread with tomato and basil topping.",
-        "price": 6.0,
-        "image": "/images/bruschetta.jpg"
-      }
-    ]
-  },
-  {
-    "id": "2",
-    "name": "Osteria Roma",
-    "category": "Italian",
-    "description": "Traditional Roman cuisine with a warm ambiance.",
-    "products": [
-      {
-        "id": "1",
-        "name": "Carbonara",
-        "description": "Pasta with eggs, cheese, pancetta, and pepper.",
-        "price": 15.0,
-        "image": "/images/carbonara.jpg"
+        "price": 6.0
       },
       {
-        "id": "2",
-        "name": "Saltimbocca",
-        "description": "Veal with prosciutto and sage.",
-        "price": 20.0,
-        "image": "/images/saltimbocca.jpg"
+        "id": "5",
+        "storeId": "2",
+        "name": "Spaghetti Carbonara",
+        "description": "Pasta with creamy egg sauce and pancetta.",
+        "price": 15.0
       },
       {
-        "id": "3",
-        "name": "Tiramisu",
-        "description": "Classic tiramisu with coffee and mascarpone.",
-        "price": 9.0,
-        "image": "/images/tiramisu.jpg"
+        "id": "6",
+        "storeId": "2",
+        "name": "Fettuccine Alfredo",
+        "description": "Fettuccine pasta in a rich Alfredo sauce.",
+        "price": 16.0
       },
       {
-        "id": "4",
-        "name": "Crostini",
-        "description": "Toasted bread with various toppings.",
-        "price": 7.0,
-        "image": "/images/crostini.jpg"
-      }
-    ]
-  },
-  {
-    "id": "3",
-    "name": "Pasta Paradise",
-    "category": "Italian",
-    "description": "Delicious pasta dishes with authentic flavors.",
-    "products": [
-      {
-        "id": "1",
-        "name": "Spaghetti Bolognese",
-        "description": "Classic spaghetti with meat sauce.",
-        "price": 14.0,
-        "image": "/images/spaghetti_bolognese.jpg"
+        "id": "7",
+        "storeId": "2",
+        "name": "Caprese Salad",
+        "description": "Fresh tomatoes, mozzarella, and basil with balsamic reduction.",
+        "price": 10.0
       },
       {
-        "id": "2",
-        "name": "Lasagna",
-        "description": "Layers of pasta with meat and cheese.",
-        "price": 18.0,
-        "image": "/images/lasagna.jpg"
+        "id": "8",
+        "storeId": "3",
+        "name": "Risotto alla Milanese",
+        "description": "Creamy risotto with saffron.",
+        "price": 20.0
       },
       {
-        "id": "3",
+        "id": "9",
+        "storeId": "3",
+        "name": "Osso Buco",
+        "description": "Braised veal shanks with vegetables.",
+        "price": 22.0
+      },
+      {
+        "id": "10",
+        "storeId": "3",
         "name": "Panna Cotta",
-        "description": "Smooth vanilla panna cotta with berry sauce.",
-        "price": 8.0,
-        "image": "/images/panna_cotta.jpg"
+        "description": "Smooth vanilla cream dessert.",
+        "price": 8.0
       },
       {
-        "id": "4",
-        "name": "Antipasto",
-        "description": "Italian antipasto platter with cured meats and cheeses.",
-        "price": 11.0,
-        "image": "/images/antipasto.jpg"
-      }
-    ]
-  },
-  {
-    "id": "4",
-    "name": "Trattoria Bella Vita",
-    "category": "Italian",
-    "description": "Cozy trattoria serving authentic Italian fare.",
-    "products": [
-      {
-        "id": "1",
-        "name": "Risotto",
-        "description": "Creamy risotto with seasonal vegetables.",
-        "price": 16.0,
-        "image": "/images/risotto.jpg"
+        "id": "11",
+        "storeId": "4",
+        "name": "Gnocchi di Patate",
+        "description": "Potato dumplings with tomato sauce.",
+        "price": 14.0
       },
       {
-        "id": "2",
-        "name": "Gnocchi",
-        "description": "Soft potato gnocchi with tomato sauce.",
-        "price": 16.0,
-        "image": "/images/gnocchi.jpg"
+        "id": "12",
+        "storeId": "4",
+        "name": "Panzanella",
+        "description": "Tuscan bread salad with tomatoes and cucumbers.",
+        "price": 12.0
       },
       {
-        "id": "3",
-        "name": "Panna Cotta",
-        "description": "Classic panna cotta with berry sauce.",
-        "price": 8.0,
-        "image": "/images/panna_cotta.jpg"
-      },
-      {
-        "id": "4",
+        "id": "13",
+        "storeId": "4",
         "name": "Frittata",
-        "description": "Italian omelette with vegetables and cheese.",
-        "price": 10.0,
-        "image": "/images/frittata.jpg"
-      }
-    ]
-  },
-  {
-    "id": "5",
-    "name": "La Dolce Vita",
-    "category": "Italian",
-    "description": "Sweet Italian experiences with delightful desserts.",
-    "products": [
+        "description": "Egg-based Italian omelette with seasonal vegetables.",
+        "price": 9.0
+      },
       {
-        "id": "1",
+        "id": "14",
+        "storeId": "5",
+        "name": "Seafood Linguine",
+        "description": "Linguine with mixed seafood in a light tomato sauce.",
+        "price": 18.0
+      },
+      {
+        "id": "15",
+        "storeId": "5",
+        "name": "Melanzane alla Parmigiana",
+        "description": "Baked eggplant with tomato sauce and cheese.",
+        "price": 13.0
+      },
+      {
+        "id": "16",
+        "storeId": "5",
         "name": "Cannoli",
-        "description": "Crispy pastry shells filled with sweet ricotta cheese.",
-        "price": 7.0,
-        "image": "/images/cannoli.jpg"
-      },
-      {
-        "id": "2",
-        "name": "Gelato",
-        "description": "Authentic Italian ice cream with various flavors.",
-        "price": 5.0,
-        "image": "/images/gelato.jpg"
-      },
-      {
-        "id": "3",
-        "name": "Tiramisu",
-        "description": "Classic tiramisu with coffee and mascarpone.",
-        "price": 8.0,
-        "image": "/images/tiramisu.jpg"
-      },
-      {
-        "id": "4",
-        "name": "Espresso",
-        "description": "Strong and rich Italian espresso.",
-        "price": 3.0,
-        "image": "/images/espresso.jpg"
+        "description": "Crispy pastry filled with sweet ricotta cheese.",
+        "price": 6.0
       }
     ]
   },
   {
-    "id": "6",
-    "name": "Dynasty Chinese",
-    "category": "Chinese",
-    "description": "Authentic Chinese dishes with traditional flavors.",
+    "stores": [
+      {
+        "id": "6",
+        "name": "Sushi World",
+        "category": "Japanese",
+        "description": "Authentic Japanese sushi and sashimi."
+      },
+      {
+        "id": "7",
+        "name": "Tokyo Delight",
+        "category": "Japanese",
+        "description": "Fresh sushi and traditional Japanese dishes."
+      },
+      {
+        "id": "8",
+        "name": "Nihon Bistro",
+        "category": "Japanese",
+        "description": "Japanese comfort food and sushi rolls."
+      },
+      {
+        "id": "9",
+        "name": "Osaka Eats",
+        "category": "Japanese",
+        "description": "Japanese street food and sushi specialties."
+      },
+      {
+        "id": "10",
+        "name": "Kobe Kitchen",
+        "category": "Japanese",
+        "description": "High-quality sushi and modern Japanese cuisine."
+      }
+    ],
     "products": [
       {
-        "id": "1",
-        "name": "General Tso's Chicken",
-        "description": "Spicy and sweet chicken with vegetables.",
-        "price": 13.0,
-        "image": "/images/general_tso_chicken.jpg"
+        "id": "17",
+        "storeId": "6",
+        "name": "Salmon Sushi",
+        "description": "Fresh salmon slices over vinegared rice.",
+        "price": 12.0
       },
       {
-        "id": "2",
-        "name": "Fried Rice",
-        "description": "Flavorful fried rice with vegetables and meat.",
-        "price": 11.0,
-        "image": "/images/fried_rice.jpg"
+        "id": "18",
+        "storeId": "6",
+        "name": "Tuna Sashimi",
+        "description": "Thinly sliced raw tuna served with soy sauce.",
+        "price": 15.0
       },
       {
-        "id": "3",
-        "name": "Spring Rolls",
-        "description": "Crispy rolls filled with vegetables.",
-        "price": 6.0,
-        "image": "/images/spring_rolls.jpg"
+        "id": "19",
+        "storeId": "6",
+        "name": "Tempura",
+        "description": "Crispy fried shrimp and vegetables.",
+        "price": 10.0
       },
       {
-        "id": "4",
-        "name": "Kung Pao Chicken",
-        "description": "Spicy chicken stir-fry with peanuts.",
-        "price": 14.0,
-        "image": "/images/kung_pao_chicken.jpg"
+        "id": "20",
+        "storeId": "7",
+        "name": "California Roll",
+        "description": "Sushi roll with crab, avocado, and cucumber.",
+        "price": 11.0
+      },
+      {
+        "id": "21",
+        "storeId": "7",
+        "name": "Spicy Tuna Roll",
+        "description": "Spicy tuna roll with cucumber and spicy mayo.",
+        "price": 13.0
+      },
+      {
+        "id": "22",
+        "storeId": "7",
+        "name": "Miso Soup",
+        "description": "Traditional Japanese soup with tofu and seaweed.",
+        "price": 5.0
+      },
+      {
+        "id": "23",
+        "storeId": "8",
+        "name": "Ebi Tempura Roll",
+        "description": "Sushi roll with tempura shrimp and avocado.",
+        "price": 12.0
+      },
+      {
+        "id": "24",
+        "storeId": "8",
+        "name": "Unagi Don",
+        "description": "Grilled eel served over rice with a sweet soy sauce.",
+        "price": 16.0
+      },
+      {
+        "id": "25",
+        "storeId": "8",
+        "name": "Yakitori",
+        "description": "Grilled chicken skewers with teriyaki sauce.",
+        "price": 8.0
+      },
+      {
+        "id": "26",
+        "storeId": "9",
+        "name": "Okonomiyaki",
+        "description": "Savory Japanese pancake with various fillings.",
+        "price": 14.0
+      },
+      {
+        "id": "27",
+        "storeId": "9",
+        "name": "Gyoza",
+        "description": "Japanese dumplings filled with pork and vegetables.",
+        "price": 9.0
+      },
+      {
+        "id": "28",
+        "storeId": "9",
+        "name": "Tonkotsu Ramen",
+        "description": "Rich pork bone broth ramen with noodles and toppings.",
+        "price": 13.0
+      },
+      {
+        "id": "29",
+        "storeId": "10",
+        "name": "Sashimi Platter",
+        "description": "Assorted sashimi including tuna, salmon, and yellowtail.",
+        "price": 25.0
+      },
+      {
+        "id": "30",
+        "storeId": "10",
+        "name": "Tempura Udon",
+        "description": "Udon noodles in broth with tempura vegetables.",
+        "price": 14.0
+      },
+      {
+        "id": "31",
+        "storeId": "10",
+        "name": "Japanese Cheesecake",
+        "description": "Light and fluffy cheesecake with a hint of vanilla.",
+        "price": 7.0
       }
     ]
   },
   {
-    "id": "7",
-    "name": "The Dragon's Wok",
-    "category": "Chinese",
-    "description": "Traditional Chinese dishes with a modern twist.",
-    "products": [
+    "stores": [
       {
-        "id": "1",
-        "name": "Sweet and Sour Pork",
-        "description": "Classic sweet and sour pork with vegetables.",
-        "price": 12.0,
-        "image": "/images/sweet_and_sour_pork.jpg"
+        "id": "11",
+        "name": "Taco Fiesta",
+        "category": "Mexican",
+        "description": "Spicy and flavorful Mexican street food."
       },
       {
-        "id": "2",
-        "name": "Dumplings",
-        "description": "Steamed dumplings with pork and vegetables.",
-        "price": 8.0,
-        "image": "/images/dumplings.jpg"
+        "id": "12",
+        "name": "Burrito Bar",
+        "category": "Mexican",
+        "description": "Delicious burritos with various fillings and salsas."
       },
       {
-        "id": "3",
-        "name": "Hot and Sour Soup",
-        "description": "Spicy and tangy hot and sour soup.",
-        "price": 7.0,
-        "image": "/images/hot_and_sour_soup.jpg"
+        "id": "13",
+        "name": "Cantina Mexicana",
+        "category": "Mexican",
+        "description": "Traditional Mexican dishes with a vibrant atmosphere."
       },
       {
-        "id": "4",
-        "name": "Peking Duck",
-        "description": "Roasted Peking duck with hoisin sauce.",
-        "price": 25.0,
-        "image": "/images/peking_duck.jpg"
+        "id": "14",
+        "name": "El Camino",
+        "category": "Mexican",
+        "description": "Authentic Mexican food with a focus on street tacos."
+      },
+      {
+        "id": "15",
+        "name": "La Taqueria",
+        "category": "Mexican",
+        "description": "Famous for its tacos and fresh guacamole."
       }
-    ]
-  },
-  {
-    "id": "8",
-    "name": "Golden Panda",
-    "category": "Chinese",
-    "description": "Authentic and flavorful Chinese dishes.",
+    ],
     "products": [
       {
-        "id": "1",
-        "name": "Mapo Tofu",
-        "description": "Spicy tofu dish with ground pork.",
-        "price": 11.0,
-        "image": "/images/mapo_tofu.jpg"
+        "id": "32",
+        "storeId": "11",
+        "name": "Beef Taco",
+        "description": "Grilled beef with lettuce, cheese, and salsa in a soft tortilla.",
+        "price": 8.0
       },
       {
-        "id": "2",
-        "name": "Chow Mein",
-        "description": "Stir-fried noodles with vegetables and meat.",
-        "price": 10.0,
-        "image": "/images/chow_mein.jpg"
+        "id": "33",
+        "storeId": "11",
+        "name": "Chicken Quesadilla",
+        "description": "Grilled chicken with melted cheese in a flour tortilla.",
+        "price": 9.0
       },
       {
-        "id": "3",
-        "name": "Egg Drop Soup",
-        "description": "Simple and comforting egg drop soup.",
-        "price": 6.0,
-        "image": "/images/egg_drop_soup.jpg"
+        "id": "34",
+        "storeId": "11",
+        "name": "Churros",
+        "description": "Fried dough pastry coated in cinnamon sugar.",
+        "price": 5.0
       },
       {
-        "id": "4",
-        "name": "Beef with Broccoli",
-        "description": "Tender beef with broccoli in a savory sauce.",
-        "price": 12.0,
-        "image": "/images/beef_with_broccoli.jpg"
-      }
-    ]
-  },
-  {
-    "id": "9",
-    "name": "Wok & Roll",
-    "category": "Chinese",
-    "description": "Modern Chinese cuisine with bold flavors.",
-    "products": [
-      {
-        "id": "1",
-        "name": "Sesame Chicken",
-        "description": "Crispy chicken with sesame seeds and sauce.",
-        "price": 13.0,
-        "image": "/images/sesame_chicken.jpg"
+        "id": "35",
+        "storeId": "12",
+        "name": "Beef Burrito",
+        "description": "Flour tortilla stuffed with seasoned beef, rice, and beans.",
+        "price": 10.0
       },
       {
-        "id": "2",
-        "name": "Lo Mein",
-        "description": "Stir-fried lo mein noodles with vegetables and meat.",
-        "price": 11.0,
-        "image": "/images/lo_mein.jpg"
+        "id": "36",
+        "storeId": "12",
+        "name": "Chicken Enchiladas",
+        "description": "Corn tortillas filled with chicken and topped with enchilada sauce.",
+        "price": 11.0
       },
       {
-        "id": "3",
-        "name": "Hot Pot",
-        "description": "Chinese hot pot with a variety of ingredients.",
-        "price": 15.0,
-        "image": "/images/hot_pot.jpg"
+        "id": "37",
+        "storeId": "12",
+        "name": "Guacamole",
+        "description": "Fresh avocado dip with lime and cilantro.",
+        "price": 6.0
       },
       {
-        "id": "4",
-        "name": "Spring Rolls",
-        "description": "Crispy spring rolls filled with vegetables.",
-        "price": 7.0,
-        "image": "/images/spring_rolls.jpg"
-      }
-    ]
-  },
-  {
-    "id": "10",
-    "name": "Seoul Garden",
-    "category": "Korean",
-    "description": "Delicious Korean BBQ and traditional Korean dishes.",
-    "products": [
-      {
-        "id": "1",
-        "name": "Bulgogi",
-        "description": "Marinated beef grilled to perfection.",
-        "price": 16.0,
-        "image": "/images/bulgogi.jpg"
+        "id": "38",
+        "storeId": "13",
+        "name": "Carnitas Tacos",
+        "description": "Slow-cooked pork tacos with onions and cilantro.",
+        "price": 9.0
       },
       {
-        "id": "2",
-        "name": "Kimchi",
-        "description": "Spicy fermented cabbage side dish.",
-        "price": 5.0,
-        "image": "/images/kimchi.jpg"
+        "id": "39",
+        "storeId": "13",
+        "name": "Chimichanga",
+        "description": "Deep-fried burrito stuffed with beef or chicken.",
+        "price": 12.0
       },
       {
-        "id": "3",
-        "name": "Bibimbap",
-        "description": "Mixed rice with vegetables and a fried egg.",
-        "price": 12.0,
-        "image": "/images/bibimbap.jpg"
+        "id": "40",
+        "storeId": "13",
+        "name": "Tres Leches Cake",
+        "description": "Moist cake soaked in three kinds of milk.",
+        "price": 7.0
       },
       {
-        "id": "4",
-        "name": "Korean BBQ",
-        "description": "Grilled meats with a variety of sides.",
-        "price": 20.0,
-        "image": "/images/korean_bbq.jpg"
-      }
-    ]
-  },
-  {
-    "id": "11",
-    "name": "Han's Korean Kitchen",
-    "category": "Korean",
-    "description": "Authentic Korean flavors in a cozy setting.",
-    "products": [
-      {
-        "id": "1",
-        "name": "Samgyeopsal",
-        "description": "Grilled pork belly served with lettuce wraps.",
-        "price": 18.0,
-        "image": "/images/samgyeopsal.jpg"
+        "id": "41",
+        "storeId": "14",
+        "name": "Fish Tacos",
+        "description": "Grilled fish with cabbage slaw and creamy sauce in a tortilla.",
+        "price": 9.0
       },
       {
-        "id": "2",
-        "name": "Kimchi Jjigae",
-        "description": "Spicy kimchi stew with pork.",
-        "price": 14.0,
-        "image": "/images/kimchi_jjigae.jpg"
+        "id": "42",
+        "storeId": "14",
+        "name": "Mexican Street Corn",
+        "description": "Corn on the cob with mayo, cheese, and chili powder.",
+        "price": 5.0
       },
       {
-        "id": "3",
-        "name": "Jjajangmyeon",
-        "description": "Noodles in a savory black bean sauce.",
-        "price": 11.0,
-        "image": "/images/jjajangmyeon.jpg"
+        "id": "43",
+        "storeId": "14",
+        "name": "Horchata",
+        "description": "Sweet rice drink flavored with cinnamon.",
+        "price": 4.0
       },
       {
-        "id": "4",
-        "name": "Pajeon",
-        "description": "Savory Korean pancake with green onions.",
-        "price": 9.0,
-        "image": "/images/pajeon.jpg"
-      }
-    ]
-  },
-  {
-    "id": "12",
-    "name": "K-Town Grill",
-    "category": "Korean",
-    "description": "Modern Korean BBQ and Korean comfort food.",
-    "products": [
-      {
-        "id": "1",
-        "name": "Samgyeopsal",
-        "description": "Grilled pork belly served with lettuce wraps.",
-        "price": 18.0,
-        "image": "/images/samgyeopsal.jpg"
+        "id": "44",
+        "storeId": "15",
+        "name": "Soft Tacos",
+        "description": "Tacos with your choice of beef, chicken, or pork.",
+        "price": 7.0
       },
       {
-        "id": "2",
-        "name": "Japchae",
-        "description": "Stir-fried sweet potato noodles with vegetables.",
-        "price": 14.0,
-        "image": "/images/japchae.jpg"
+        "id": "45",
+        "storeId": "15",
+        "name": "Nachos",
+        "description": "Tortilla chips topped with cheese, beans, and jalapeños.",
+        "price": 8.0
       },
       {
-        "id": "3",
-        "name": "Tteokbokki",
-        "description": "Spicy rice cakes in a sweet and spicy sauce.",
-        "price": 10.0,
-        "image": "/images/tteokbokki.jpg"
-      },
-      {
-        "id": "4",
-        "name": "Hoddeok",
-        "description": "Sweet Korean pancakes with brown sugar filling.",
-        "price": 6.0,
-        "image": "/images/hoddeok.jpg"
-      }
-    ]
-  },
-  {
-    "id": "13",
-    "name": "Seoul BBQ",
-    "category": "Korean",
-    "description": "Authentic Korean BBQ with a wide range of dishes.",
-    "products": [
-      {
-        "id": "1",
-        "name": "Galbi",
-        "description": "Marinated short ribs grilled to perfection.",
-        "price": 22.0,
-        "image": "/images/galbi.jpg"
-      },
-      {
-        "id": "2",
-        "name": "Kimchi Fried Rice",
-        "description": "Fried rice with kimchi and vegetables.",
-        "price": 11.0,
-        "image": "/images/kimchi_fried_rice.jpg"
-      },
-      {
-        "id": "3",
-        "name": "Banchan",
-        "description": "Assorted Korean side dishes.",
-        "price": 8.0,
-        "image": "/images/banchan.jpg"
-      },
-      {
-        "id": "4",
-        "name": "Soondubu Jjigae",
-        "description": "Spicy soft tofu stew.",
-        "price": 12.0,
-        "image": "/images/soondubu_jjigae.jpg"
+        "id": "46",
+        "storeId": "15",
+        "name": "Flan",
+        "description": "Caramel custard dessert with a smooth texture.",
+        "price": 6.0
       }
     ]
   }
