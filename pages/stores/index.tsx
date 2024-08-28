@@ -3,11 +3,17 @@ import { useState } from "react";
 import fs from "fs";
 import path from "path";
 import { Store } from "../../types/Store";
+import { Product } from "../../types/Product";
 import StoreCard from "../../components/StoreCard";
 
 const ITEMS_PER_PAGE = 3;
 
-const Stores: NextPage<{ stores: Store[] }> = ({ stores }) => {
+interface StoresProps {
+  stores: Store[];
+  products: Product[];
+}
+
+const Stores: NextPage<StoresProps> = ({ stores, products }) => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [currentPages, setCurrentPages] = useState<Record<string, number>>({});
 
@@ -61,7 +67,14 @@ const Stores: NextPage<{ stores: Store[] }> = ({ stores }) => {
           </button>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 flex-grow">
             {currentStores.map((store) => (
-              <StoreCard key={store.id} {...store} />
+              <div key={store.id} className="h-48">
+                <StoreCard
+                  store={store}
+                  products={products.filter(
+                    (product) => product.storeId === store.id
+                  )}
+                />
+              </div>
             ))}
           </div>
           <button
@@ -111,11 +124,19 @@ export const getServerSideProps: GetServerSideProps = async () => {
   try {
     const filePath = path.join(process.cwd(), "public", "data", "stores.json");
     const fileContent = fs.readFileSync(filePath, "utf8");
-    const stores: Store[] = JSON.parse(fileContent);
-    return { props: { stores } };
+    const parsedData = JSON.parse(fileContent);
+
+    const stores: Store[] = parsedData.flatMap(
+      (category: any) => category.stores || []
+    );
+    const products: Product[] = parsedData.flatMap(
+      (category: any) => category.products || []
+    );
+
+    return { props: { stores, products } };
   } catch (error) {
-    console.error("Error reading stores file:", error);
-    return { props: { stores: [] } };
+    console.error("Error reading or parsing stores file:", error);
+    return { props: { stores: [], products: [] } };
   }
 };
 
