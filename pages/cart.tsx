@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "../contexts/CartContext";
 import { CartProduct } from "../types/CartProduct";
+import { useRouter } from "next/router";
 
 const EmptyCart: React.FC = () => (
   <div className="p-6 text-center">
@@ -92,11 +93,16 @@ const CartProductComponent: React.FC<CartProductProps> = ({
 
 const Cart: NextPage = () => {
   const { items, updateQuantity, removeFromCart } = useCart();
+  const router = useRouter();
 
   const totalPrice = items.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+
+  const handleCheckout = () => {
+    router.push("/orders");
+  };
 
   return (
     <div className="min-h-screen">
@@ -104,8 +110,8 @@ const Cart: NextPage = () => {
         <div className="container mx-auto px-4 py-6 flex justify-between items-center">
           <h1 className="text-3xl font-bold text-gray-800">🛒 Your Cart</h1>
           <Link
-            href="/"
-            className="inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300"
+            href="/stores"
+            className="inline-block px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300"
           >
             Continue Shopping
           </Link>
@@ -131,7 +137,10 @@ const Cart: NextPage = () => {
                   ${totalPrice.toFixed(2)}
                 </span>
               </div>
-              <button className="w-full bg-purple-500 text-white px-6 py-3 rounded-md text-lg font-semibold hover:bg-purple-600 transition duration-300">
+              <button
+                onClick={handleCheckout}
+                className="w-full bg-purple-500 text-white px-10 py-3 rounded-md text-lg font-semibold hover:bg-purple-600 transition duration-300"
+              >
                 Proceed to Checkout
               </button>
             </div>
