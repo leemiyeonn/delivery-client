@@ -11,7 +11,7 @@ const OrderCard: FC<OrderCardProps> = ({ order }) => {
       <h2 className="text-xl font-bold mb-2">Order ID: {order.id}</h2>
       <div className="grid grid-cols-2 gap-4 mb-4">
         <div>
-          <p className="text-gray-600">Store: {order.storeId}</p>
+          <p className="text-gray-600">Store: {order.storeName}</p>
           <p className="text-gray-600">Total: ${order.total.toFixed(2)}</p>
           <p className="text-gray-600">Status: {order.status}</p>
         </div>
