@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import StoreCard from "../components/StoreCard";
 import { Store } from "../types/Store";
+import { Product } from "../types/Product";
 import path from "path";
 import fs from "fs";
 
@@ -10,9 +11,10 @@ const ITEMS_PER_PAGE = 10;
 
 interface SearchPageProps {
   stores: Store[];
+  products: Product[];
 }
 
-const SearchPage: NextPage<SearchPageProps> = ({ stores }) => {
+const SearchPage: NextPage<SearchPageProps> = ({ stores, products }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredStores, setFilteredStores] = useState<Store[]>([]);
@@ -88,7 +90,6 @@ const SearchPage: NextPage<SearchPageProps> = ({ stores }) => {
         </div>
       </form>
 
-      {/* 조건부 렌더링: 필터링된 스토어가 없을 때 */}
       {filteredStores.length === 0 && (
         <p className="text-center text-gray-600 mb-8">
           No stores found. Try a different search term.
@@ -100,12 +101,13 @@ const SearchPage: NextPage<SearchPageProps> = ({ stores }) => {
           <StoreCard
             key={store.id}
             store={store}
-            products={store.products || []}
+            products={products.filter(
+              (product) => product.storeId === store.id
+            )} // 해당 스토어의 제품 필터링
           />
         ))}
       </div>
 
-      {/* 페이지 버튼 및 페이지 정보 */}
       {filteredStores.length > 0 && (
         <div className="flex items-center justify-center gap-4 mt-8">
           <button
@@ -139,13 +141,19 @@ export const getServerSideProps: GetServerSideProps<
   try {
     const filePath = path.join(process.cwd(), "public", "data", "stores.json");
     const fileContent = fs.readFileSync(filePath, "utf8");
-    const data = JSON.parse(fileContent);
-    const stores = data.flatMap((item: { stores: Store[] }) => item.stores);
+    const parsedData = JSON.parse(fileContent);
 
-    return { props: { stores } };
+    const stores: Store[] = parsedData.flatMap(
+      (category: any) => category.stores || []
+    );
+    const products: Product[] = parsedData.flatMap(
+      (category: any) => category.products || []
+    );
+
+    return { props: { stores, products } };
   } catch (error) {
     console.error("Error reading or parsing stores file:", error);
-    return { props: { stores: [] } };
+    return { props: { stores: [], products: [] } };
   }
 };
 

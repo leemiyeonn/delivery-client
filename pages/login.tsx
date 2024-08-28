@@ -37,7 +37,7 @@ const Login: NextPage = () => {
           <div>
             <label
               htmlFor="email"
-              className="block text-gray-700 text-sm font-medium mb-2"
+              className="block text-left text-gray-700 text-sm font-medium mb-2"
             >
               Email
             </label>
@@ -54,7 +54,7 @@ const Login: NextPage = () => {
           <div>
             <label
               htmlFor="password"
-              className="block text-gray-700 text-sm font-medium mb-2"
+              className="block text-left text-gray-700 text-sm font-medium mb-2"
             >
               Password
             </label>
