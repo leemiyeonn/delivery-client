@@ -64,7 +64,7 @@ const StoresPage: NextPage<StoresPageProps> = ({ stores, products }) => {
             id="sort"
             value={sortOption}
             onChange={handleSortChange}
-            className="p-2 border bg-transparent text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-200"
+            className="p-2 border rounded-md bg-transparent text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-200"
           >
             <option value="name_asc">Name (A-Z)</option>
             <option value="name_desc">Name (Z-A)</option>
