@@ -6,8 +6,16 @@ import { Store } from "../types/Store";
 import path from "path";
 import fs from "fs";
 
-const SearchPage: NextPage<{ stores: Store[] }> = ({ stores }) => {
+const ITEMS_PER_PAGE = 10;
+
+interface SearchPageProps {
+  stores: Store[];
+}
+
+const SearchPage: NextPage<SearchPageProps> = ({ stores }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [filteredStores, setFilteredStores] = useState<Store[]>([]);
   const router = useRouter();
 
   useEffect(() => {
@@ -16,11 +24,22 @@ const SearchPage: NextPage<{ stores: Store[] }> = ({ stores }) => {
     }
   }, [router.query.query]);
 
-  const filteredStores = stores.filter(
-    (store) =>
-      store.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      store.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    const updatedFilteredStores = searchTerm
+      ? stores.filter((store) => {
+          const nameMatch = store.name
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase());
+          const categoryMatch = store.category
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase());
+          return nameMatch || categoryMatch;
+        })
+      : stores;
+
+    setFilteredStores(updatedFilteredStores);
+    setCurrentPage(1); // Reset to the first page whenever the search term changes
+  }, [searchTerm, stores]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,6 +47,24 @@ const SearchPage: NextPage<{ stores: Store[] }> = ({ stores }) => {
       shallow: true,
     });
   };
+
+  const handlePageChange = (delta: number) => {
+    setCurrentPage((prev) =>
+      Math.max(
+        1,
+        Math.min(
+          Math.ceil(filteredStores.length / ITEMS_PER_PAGE),
+          prev + delta
+        )
+      )
+    );
+  };
+
+  const pageCount = Math.ceil(filteredStores.length / ITEMS_PER_PAGE);
+  const currentStores = filteredStores.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -51,30 +88,65 @@ const SearchPage: NextPage<{ stores: Store[] }> = ({ stores }) => {
         </div>
       </form>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredStores.map((store) => (
-          <StoreCard key={store.id} {...store} />
+      {/* 조건부 렌더링: 필터링된 스토어가 없을 때 */}
+      {filteredStores.length === 0 && (
+        <p className="text-center text-gray-600 mb-8">
+          No stores found. Try a different search term.
+        </p>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {currentStores.map((store) => (
+          <StoreCard
+            key={store.id}
+            store={store}
+            products={store.products || []}
+          />
         ))}
       </div>
 
-      {filteredStores.length === 0 && (
-        <p className="text-center text-gray-600 mt-8">
-          No stores found. Try a different search term.
-        </p>
+      {/* 페이지 버튼 및 페이지 정보 */}
+      {filteredStores.length > 0 && (
+        <div className="flex items-center justify-center gap-4 mt-8">
+          <button
+            onClick={() => handlePageChange(-1)}
+            disabled={currentPage === 1}
+            className="p-2 rounded-full bg-gray-200 text-gray-800 disabled:opacity-50"
+            aria-label="Previous page"
+          >
+            &#9664;
+          </button>
+          <span>
+            Page {currentPage} of {pageCount}
+          </span>
+          <button
+            onClick={() => handlePageChange(1)}
+            disabled={currentPage === pageCount}
+            className="p-2 rounded-full bg-gray-200 text-gray-800 disabled:opacity-50"
+            aria-label="Next page"
+          >
+            &#9654;
+          </button>
+        </div>
       )}
     </div>
   );
 };
 
-// 서버 사이드에서 JSON 파일을 읽어오는 함수
-export const getServerSideProps: GetServerSideProps = async () => {
-  const filePath = path.join(process.cwd(), "public", "data", "stores.json");
-  const fileContent = fs.readFileSync(filePath, "utf8");
-  const stores: Store[] = JSON.parse(fileContent);
+export const getServerSideProps: GetServerSideProps<
+  SearchPageProps
+> = async () => {
+  try {
+    const filePath = path.join(process.cwd(), "public", "data", "stores.json");
+    const fileContent = fs.readFileSync(filePath, "utf8");
+    const data = JSON.parse(fileContent);
+    const stores = data.flatMap((item: { stores: Store[] }) => item.stores);
 
-  return {
-    props: { stores },
-  };
+    return { props: { stores } };
+  } catch (error) {
+    console.error("Error reading or parsing stores file:", error);
+    return { props: { stores: [] } };
+  }
 };
 
 export default SearchPage;
