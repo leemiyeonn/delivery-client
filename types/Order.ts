@@ -1,7 +1,7 @@
 import { OrderProduct } from "./OrderProduct";
 import { OrderStatus } from "./OrderStatus";
 
-export interface Order {
+export interface Order extends BaseModel {
   id: string;
   storeName: string;
   products: OrderProduct[];

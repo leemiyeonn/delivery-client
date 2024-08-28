@@ -1,100 +1,78 @@
+import React, { useState, useMemo } from "react";
 import { NextPage, GetServerSideProps } from "next";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import StoreCard from "../components/StoreCard";
 import { Store } from "../types/Store";
 import { Product } from "../types/Product";
 import path from "path";
 import fs from "fs";
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 9;
 
-interface SearchPageProps {
+interface StoresPageProps {
   stores: Store[];
   products: Product[];
 }
 
-const SearchPage: NextPage<SearchPageProps> = ({ stores, products }) => {
-  const [searchTerm, setSearchTerm] = useState("");
+type SortOption = "name_asc" | "name_desc" | "date_asc" | "date_desc";
+
+const StoresPage: NextPage<StoresPageProps> = ({ stores, products }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredStores, setFilteredStores] = useState<Store[]>([]);
-  const router = useRouter();
+  const [sortOption, setSortOption] = useState<SortOption>("name_asc");
 
-  useEffect(() => {
-    if (router.query.query) {
-      setSearchTerm(router.query.query as string);
-    }
-  }, [router.query.query]);
+  const sortedStores = useMemo(() => {
+    return [...stores].sort((a, b) => {
+      const [field, direction] = sortOption.split("_");
+      const multiplier = direction === "asc" ? 1 : -1;
 
-  useEffect(() => {
-    const updatedFilteredStores = searchTerm
-      ? stores.filter((store) => {
-          const nameMatch = store.name
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase());
-          const categoryMatch = store.category
-            .toLowerCase()
-            .includes(searchTerm.toLowerCase());
-          return nameMatch || categoryMatch;
-        })
-      : stores;
-
-    setFilteredStores(updatedFilteredStores);
-    setCurrentPage(1); // Reset to the first page whenever the search term changes
-  }, [searchTerm, stores]);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    router.push(`/search?query=${encodeURIComponent(searchTerm)}`, undefined, {
-      shallow: true,
+      switch (field) {
+        case "name":
+          return multiplier * a.name.localeCompare(b.name);
+        case "date":
+          return (
+            multiplier *
+            (new Date(a.created_at).getTime() -
+              new Date(b.created_at).getTime())
+          );
+        default:
+          return 0;
+      }
     });
-  };
+  }, [stores, sortOption]);
 
-  const handlePageChange = (delta: number) => {
-    setCurrentPage((prev) =>
-      Math.max(
-        1,
-        Math.min(
-          Math.ceil(filteredStores.length / ITEMS_PER_PAGE),
-          prev + delta
-        )
-      )
-    );
-  };
-
-  const pageCount = Math.ceil(filteredStores.length / ITEMS_PER_PAGE);
-  const currentStores = filteredStores.slice(
+  const pageCount = Math.ceil(sortedStores.length / ITEMS_PER_PAGE);
+  const currentStores = sortedStores.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
   );
 
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortOption(e.target.value as SortOption);
+    setCurrentPage(1);
+  };
+
+  const handlePageChange = (delta: number) => {
+    setCurrentPage((prev) => Math.max(1, Math.min(pageCount, prev + delta)));
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">🔎 Search</h1>
-
-      <form onSubmit={handleSearch} className="mb-8">
-        <div className="flex rounded-md shadow-sm">
-          <input
-            type="text"
-            placeholder="Search stores or categories"
-            className="block w-full px-6 py-4 rounded-md border border-gray-300 text-base text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300 focus:border-blue-300"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <button
-            type="submit"
-            className="ml-4 px-6 py-4 rounded-md shadow bg-blue-500 text-white font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-300"
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">🛍️ Stores</h1>
+        <div className="flex items-center">
+          <label htmlFor="sort" className="mr-2 text-gray-700"></label>
+          <select
+            id="sort"
+            value={sortOption}
+            onChange={handleSortChange}
+            className="p-2 border bg-transparent text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-200"
           >
-            Search
-          </button>
+            <option value="name_asc">Name (A-Z)</option>
+            <option value="name_desc">Name (Z-A)</option>
+            <option value="date_asc">Date (Oldest first)</option>
+            <option value="date_desc">Date (Newest first)</option>
+          </select>
         </div>
-      </form>
-
-      {filteredStores.length === 0 && (
-        <p className="text-center text-gray-600 mb-8">
-          No stores found. Try a different search term.
-        </p>
-      )}
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {currentStores.map((store) => (
@@ -103,40 +81,38 @@ const SearchPage: NextPage<SearchPageProps> = ({ stores, products }) => {
             store={store}
             products={products.filter(
               (product) => product.storeId === store.id
-            )} // 해당 스토어의 제품 필터링
+            )}
           />
         ))}
       </div>
 
-      {filteredStores.length > 0 && (
-        <div className="flex items-center justify-center gap-4 mt-8">
-          <button
-            onClick={() => handlePageChange(-1)}
-            disabled={currentPage === 1}
-            className="p-2 rounded-full bg-gray-200 text-gray-800 disabled:opacity-50"
-            aria-label="Previous page"
-          >
-            &#9664;
-          </button>
-          <span>
-            Page {currentPage} of {pageCount}
-          </span>
-          <button
-            onClick={() => handlePageChange(1)}
-            disabled={currentPage === pageCount}
-            className="p-2 rounded-full bg-gray-200 text-gray-800 disabled:opacity-50"
-            aria-label="Next page"
-          >
-            &#9654;
-          </button>
-        </div>
-      )}
+      <div className="flex items-center justify-center gap-4 mt-8">
+        <button
+          onClick={() => handlePageChange(-1)}
+          disabled={currentPage === 1}
+          className="p-2 rounded-full bg-gray-200 text-gray-800 disabled:opacity-50"
+          aria-label="Previous page"
+        >
+          &#9664;
+        </button>
+        <span>
+          Page {currentPage} of {pageCount}
+        </span>
+        <button
+          onClick={() => handlePageChange(1)}
+          disabled={currentPage === pageCount}
+          className="p-2 rounded-full bg-gray-200 text-gray-800 disabled:opacity-50"
+          aria-label="Next page"
+        >
+          &#9654;
+        </button>
+      </div>
     </div>
   );
 };
 
 export const getServerSideProps: GetServerSideProps<
-  SearchPageProps
+  StoresPageProps
 > = async () => {
   try {
     const filePath = path.join(process.cwd(), "public", "data", "stores.json");
@@ -157,4 +133,4 @@ export const getServerSideProps: GetServerSideProps<
   }
 };
 
-export default SearchPage;
+export default StoresPage;

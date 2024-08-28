@@ -1,6 +1,6 @@
 import { Product } from "./Product";
 
-export interface Store {
+export interface Store extends BaseModel {
   id: string;
   name: string;
   category: string;
