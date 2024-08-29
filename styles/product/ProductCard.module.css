@@ -1,0 +1,45 @@
+/* ProductCard.module.css */
+
+.card {
+  @apply p-6 max-w-full bg-white rounded-lg border border-gray-200 shadow-md flex items-center space-x-4;
+}
+
+.imageContainer {
+  @apply w-16 h-16 relative;
+}
+
+.productInfo {
+  @apply flex-1;
+}
+
+.productName {
+  @apply text-lg font-semibold;
+}
+
+.productDescription {
+  @apply text-gray-600;
+}
+
+.productPrice {
+  @apply text-lg font-bold mt-1;
+}
+
+.quantityControls {
+  @apply flex items-center space-x-4;
+}
+
+.quantityButtons {
+  @apply flex items-center;
+}
+
+.quantityButton {
+  @apply px-2 py-1 bg-gray-200;
+}
+
+.quantityDisplay {
+  @apply px-4 py-1 bg-gray-100;
+}
+
+.addToCartButton {
+  @apply px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300;
+}

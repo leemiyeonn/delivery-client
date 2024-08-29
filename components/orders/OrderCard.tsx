@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Order } from "../types/Order";
+import { Order } from "../../types/orders/Order";
 
 interface OrderCardProps {
   order: Order;

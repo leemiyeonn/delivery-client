@@ -1,0 +1,24 @@
+.card {
+  @apply bg-white shadow-md rounded-lg overflow-hidden w-auto h-48 hover:shadow-lg 
+  transition-shadow duration-300 flex flex-col justify-between;
+}
+
+.cardContent {
+  @apply p-6 flex-grow;
+}
+
+.cardTitle {
+  @apply text-lg font-semibold mb-2 truncate;
+}
+
+.cardDescription {
+  @apply text-gray-600 text-sm line-clamp-2;
+}
+
+.cardFooter {
+  @apply p-6;
+}
+
+.cardFooterText {
+  @apply text-xs text-gray-500 truncate;
+}

@@ -1,10 +1,15 @@
 import { NextPage, GetServerSideProps } from "next";
 import { useState } from "react";
-import fs from "fs";
-import path from "path";
-import { Store } from "../../types/Store";
-import { Product } from "../../types/Product";
-import StoreCard from "../../components/StoreCard";
+import { Store } from "../../types/stores/Store";
+import { Product } from "../../types/products/Product";
+import StoreCard from "../../components/stores/StoreCard";
+import styles from "../../styles/store/Stores.module.css";
+import { getStoresData } from "../../lib/data/storeData";
+import {
+  groupStoresByCategory,
+  getStoresForCategory,
+  handlePageChange,
+} from "../../utils/stores/StoreUtils";
 
 const ITEMS_PER_PAGE = 3;
 
@@ -17,35 +22,15 @@ const Stores: NextPage<StoresProps> = ({ stores, products }) => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [currentPages, setCurrentPages] = useState<Record<string, number>>({});
 
-  const groupStoresByCategory = (stores: Store[]) => {
-    return stores.reduce((acc, store) => {
-      if (!acc[store.category]) {
-        acc[store.category] = [];
-      }
-      acc[store.category].push(store);
-      return acc;
-    }, {} as Record<string, Store[]>);
-  };
-
   const groupedStores = groupStoresByCategory(stores);
   const categories = ["All", ...Object.keys(groupedStores)];
 
-  const getStoresForCategory = (category: string | null) => {
-    if (category === "All" || category === null) {
-      return stores;
-    }
-    return groupedStores[category] || [];
-  };
-
-  const handlePageChange = (category: string, delta: number) => {
-    setCurrentPages((prev) => ({
-      ...prev,
-      [category]: Math.max(1, (prev[category] || 1) + delta),
-    }));
-  };
-
   const renderStores = (category: string | null) => {
-    const categoryStores = getStoresForCategory(category);
+    const categoryStores = getStoresForCategory(
+      groupedStores,
+      category,
+      stores
+    );
     const currentPage = currentPages[category || "All"] || 1;
     const pageCount = Math.ceil(categoryStores.length / ITEMS_PER_PAGE);
     const currentStores = categoryStores.slice(
@@ -54,20 +39,27 @@ const Stores: NextPage<StoresProps> = ({ stores, products }) => {
     );
 
     return (
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">{category || "All Stores"}</h2>
+      <div className={styles.gridContainer}>
+        <h2 className={styles.gridHeader}>{category || "All Stores"}</h2>
         <div className="flex items-center space-x-4">
           <button
-            onClick={() => handlePageChange(category || "All", -1)}
+            onClick={() =>
+              handlePageChange(
+                currentPages,
+                setCurrentPages,
+                category || "All",
+                -1
+              )
+            }
             disabled={currentPage === 1}
-            className="p-2 rounded-full bg-gray-200 text-gray-800 disabled:opacity-50"
+            className={styles.gridNavigationButton}
             aria-label="Previous page"
           >
             &#9664;
           </button>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 flex-grow">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 flex-grow">
             {currentStores.map((store) => (
-              <div key={store.id} className="h-48">
+              <div key={store.id} className={styles.storeCardWrapper}>
                 <StoreCard
                   store={store}
                   products={products.filter(
@@ -78,9 +70,16 @@ const Stores: NextPage<StoresProps> = ({ stores, products }) => {
             ))}
           </div>
           <button
-            onClick={() => handlePageChange(category || "All", 1)}
+            onClick={() =>
+              handlePageChange(
+                currentPages,
+                setCurrentPages,
+                category || "All",
+                1
+              )
+            }
             disabled={currentPage === pageCount}
-            className="p-2 rounded-full bg-gray-200 text-gray-800 disabled:opacity-50"
+            className={styles.gridNavigationButton}
             aria-label="Next page"
           >
             &#9654;
@@ -91,26 +90,27 @@ const Stores: NextPage<StoresProps> = ({ stores, products }) => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8 text-gray-800">🛍️ Stores</h1>
-
-      <div className="flex flex-wrap gap-4 mb-8">
-        {categories.map((category) => (
-          <button
-            key={category}
-            onClick={() =>
-              setSelectedCategory(category === "All" ? null : category)
-            }
-            className={`px-4 py-2 rounded-full font-semibold transition-colors ${
-              selectedCategory === category ||
-              (category === "All" && selectedCategory === null)
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200 text-gray-800 hover:bg-gray-300"
-            }`}
-          >
-            {category}
-          </button>
-        ))}
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h1 className={styles.headerTitle}>🛍️ Stores</h1>
+        <div className={styles.categoryButtons}>
+          {categories.map((category) => (
+            <button
+              key={category}
+              onClick={() =>
+                setSelectedCategory(category === "All" ? null : category)
+              }
+              className={`${styles.categoryButton} ${
+                selectedCategory === category ||
+                (category === "All" && selectedCategory === null)
+                  ? styles.categoryButtonActive
+                  : styles.categoryButtonInactive
+              }`}
+            >
+              {category}
+            </button>
+          ))}
+        </div>
       </div>
 
       {selectedCategory === null
@@ -122,17 +122,7 @@ const Stores: NextPage<StoresProps> = ({ stores, products }) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const filePath = path.join(process.cwd(), "public", "data", "stores.json");
-    const fileContent = fs.readFileSync(filePath, "utf8");
-    const parsedData = JSON.parse(fileContent);
-
-    const stores: Store[] = parsedData.flatMap(
-      (category: any) => category.stores || []
-    );
-    const products: Product[] = parsedData.flatMap(
-      (category: any) => category.products || []
-    );
-
+    const { stores, products } = getStoresData();
     return { props: { stores, products } };
   } catch (error) {
     console.error("Error reading or parsing stores file:", error);

@@ -1,4 +1,4 @@
-import { OrderStatus } from "../types/OrderStatus";
+import { OrderStatus } from "../../types/orders/OrderStatus";
 
 export const ORDER_STATUS_COLORS: {
   [key in OrderStatus]: { backgroundColor: string; color: string };

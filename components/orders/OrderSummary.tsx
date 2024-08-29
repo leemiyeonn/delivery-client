@@ -1,7 +1,7 @@
 import React from "react";
-import styles from "../styles/order/OrderSummary.module.css";
-import { OrderSummary as OrderSummaryType } from "../types/OrderSummary";
-import { OrderProduct } from "../types/OrderProduct";
+import styles from "../../styles/order/OrderSummary.module.css";
+import { OrderSummary as OrderSummaryType } from "../../types/orders/OrderSummary";
+import { OrderProduct } from "../../types/products/OrderProduct";
 
 type OrderSummaryProps = Omit<OrderSummaryType, "store"> & {
   store?: OrderSummaryType["store"];

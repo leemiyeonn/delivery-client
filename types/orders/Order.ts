@@ -1,4 +1,4 @@
-import { OrderProduct } from "./OrderProduct";
+import { OrderProduct } from "../products/OrderProduct";
 import { OrderStatus } from "./OrderStatus";
 
 export interface Order extends BaseModel {

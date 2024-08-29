@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs";
-import { Order } from "../types/Order";
+import { Order } from "../../types/orders/Order";
 
 const ordersFilePath = path.join(
   process.cwd(),

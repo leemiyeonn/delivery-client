@@ -1,4 +1,4 @@
-import { Store } from "../../types/Store";
+import { Store } from "../../types/stores/Store";
 
 export type SortOption = "name_asc" | "name_desc" | "date_asc" | "date_desc";
 
@@ -38,4 +38,37 @@ export const calculatePageCount = (
   itemsPerPage: number
 ): number => {
   return Math.ceil(stores.length / itemsPerPage);
+};
+
+export const groupStoresByCategory = (stores: Store[]) => {
+  return stores.reduce((acc, store) => {
+    if (!acc[store.category]) {
+      acc[store.category] = [];
+    }
+    acc[store.category].push(store);
+    return acc;
+  }, {} as Record<string, Store[]>);
+};
+
+export const getStoresForCategory = (
+  groupedStores: Record<string, Store[]>,
+  category: string | null,
+  stores: Store[]
+) => {
+  if (category === "All" || category === null) {
+    return stores;
+  }
+  return groupedStores[category] || [];
+};
+
+export const handlePageChange = (
+  currentPages: Record<string, number>,
+  setCurrentPages: React.Dispatch<React.SetStateAction<Record<string, number>>>,
+  category: string,
+  delta: number
+) => {
+  setCurrentPages((prev) => ({
+    ...prev,
+    [category]: Math.max(1, (prev[category] || 1) + delta),
+  }));
 };

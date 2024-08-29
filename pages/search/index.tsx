@@ -1,17 +1,17 @@
 import React, { useState, useMemo } from "react";
 import { NextPage, GetServerSideProps } from "next";
-import StoreCard from "../components/StoreCard";
-import { Store } from "../types/Store";
-import { Product } from "../types/Product";
+import StoreCard from "../../components/stores/StoreCard";
+import { Store } from "../../types/stores/Store";
+import { Product } from "../../types/products/Product";
 import path from "path";
 import fs from "fs";
-import styles from "../styles/store/StoresPage.module.css";
+import styles from "../../styles/store/StoresPage.module.css";
 import {
   sortStores,
   paginateStores,
   calculatePageCount,
   SortOption,
-} from "../utils/store/Stores";
+} from "../../utils/stores/StoreUtils";
 
 const ITEMS_PER_PAGE = 9;
 

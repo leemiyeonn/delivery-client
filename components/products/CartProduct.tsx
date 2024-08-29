@@ -1,15 +1,7 @@
-import { NextPage } from "next";
+import React from "react";
 import Image from "next/image";
-import { useCart } from "../contexts/CartContext";
-import { CartProduct } from "../types/CartProduct";
-import { useRouter } from "next/router";
-import styles from "../styles/cart/cart.module.css";
-
-const EmptyCart: React.FC = () => (
-  <div className={styles.emptyCart}>
-    <p className={styles.emptyCartText}>Your cart is empty.</p>
-  </div>
-);
+import { CartProduct } from "../../types/products/CartProduct";
+import styles from "../../styles/cart/Cart.module.css";
 
 interface CartProductProps {
   product: CartProduct;
@@ -87,68 +79,4 @@ const CartProductComponent: React.FC<CartProductProps> = ({
   );
 };
 
-const Cart: NextPage = () => {
-  const { items, updateQuantity, removeFromCart } = useCart();
-  const router = useRouter();
-
-  const totalPrice = items.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
-
-  const handleCheckout = () => {
-    router.push("/orders");
-  };
-
-  const handleContinueShopping = () => {
-    router.back();
-  };
-
-  return (
-    <div className="min-h-screen">
-      <header>
-        <div className={styles.headerContainer}>
-          <h1 className={styles.headerTitle}>🛒 Your Cart</h1>
-          <button
-            onClick={handleContinueShopping}
-            className={styles.continueShoppingButton}
-          >
-            Continue Shopping
-          </button>
-        </div>
-      </header>
-
-      <main className={styles.mainContainer}>
-        {items.length === 0 && <EmptyCart />}
-        {items.length > 0 && (
-          <div className="space-y-4">
-            {items.map((item) => (
-              <CartProductComponent
-                key={item.id}
-                product={item}
-                onQuantityChange={updateQuantity}
-                onRemove={removeFromCart}
-              />
-            ))}
-            <div className={styles.totalContainer}>
-              <div className={styles.totalRow}>
-                <span className={styles.totalText}>Total:</span>
-                <span className={styles.totalPrice}>
-                  ${totalPrice.toFixed(2)}
-                </span>
-              </div>
-              <button
-                onClick={handleCheckout}
-                className={`${styles.checkoutButton} mt-6`}
-              >
-                Proceed to Checkout
-              </button>
-            </div>
-          </div>
-        )}
-      </main>
-    </div>
-  );
-};
-
-export default Cart;
+export default CartProductComponent;

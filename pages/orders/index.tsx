@@ -1,7 +1,7 @@
 import { NextPage, GetStaticProps } from "next";
 import Link from "next/link";
-import { Order } from "../../types/Order";
-import { getOrdersData } from "../../lib/order";
+import { Order } from "../../types/orders/Order";
+import { getOrdersData } from "../../lib/data/orderData";
 import styles from "../../styles/order/Orders.module.css";
 
 interface OrdersProps {

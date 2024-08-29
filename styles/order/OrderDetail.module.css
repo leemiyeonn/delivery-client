@@ -1,19 +1,19 @@
-.header {
-  @apply container mx-auto px-4 py-6 flex justify-between items-center;
+.container {
+  @apply max-w-full mx-auto px-4 py-8 min-h-screen;
 }
 
-.headerTitle {
-  @apply text-3xl font-bold text-gray-800;
+.header {
+  @apply flex justify-between items-center mb-4;
+}
+
+.heading {
+  @apply text-3xl leading-10 font-bold mb-8 text-gray-800;
 }
 
 .backButton {
-  @apply inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-300; /* 패딩, 배경색, 텍스트 색상, 둥근 모서리, 전환 효과, 텍스트 장식 없음 */
+  @apply inline-block px-4 py-2 bg-blue-500 text-white rounded transition duration-300;
 }
 
 .backButton:hover {
-  @apply bg-blue-600; /* 호버 시 배경색 */
-}
-
-.main {
-  @apply min-h-screen p-8 rounded-lg overflow-hidden; /* 패딩, 둥근 모서리, 오버플로우 숨김 */
+  @apply bg-blue-600;
 }

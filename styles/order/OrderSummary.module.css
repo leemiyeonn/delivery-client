@@ -1,39 +1,43 @@
 .container {
-  @apply p-8 mb-6 rounded-lg shadow-md border border-gray-300; /* 패딩, 마진, 둥근 모서리, 그림자, 테두리 */
+  @apply max-w-full mx-auto mb-4 px-6 py-6 shadow-md border border-gray-300;
 }
 
 .orderHeader {
-  @apply text-2xl font-bold mb-4; /* 글자 크기, 폰트 굵기, 마진 */
+  @apply text-2xl font-bold mb-6;
 }
 
 .orderText {
-  @apply text-gray-600 mb-2; /* 글자 색상, 마진 */
+  @apply text-gray-600 mb-2;
 }
 
 .orderProductsHeader {
-  @apply text-2xl font-bold mb-4; /* 글자 크기, 폰트 굵기, 마진 */
+  @apply text-2xl font-bold mb-4;
 }
 
 .productList {
-  @apply border-t border-gray-300; /* 테두리 */
+  @apply border-t border-gray-300;
 }
 
 .productItem {
-  @apply py-4 flex justify-between items-center; /* 패딩, Flexbox 설정 */
+  @apply py-4 flex justify-between items-center mb-2;
 }
 
 .productName {
-  @apply text-base font-semibold; /* 글자 크기, 폰트 굵기 */
+  @apply text-base font-semibold;
 }
 
 .productQuantity {
-  @apply text-gray-500; /* 글자 색상 */
+  @apply text-gray-500;
 }
 
 .productPrice {
-  @apply text-base font-bold; /* 글자 크기, 폰트 굵기 */
+  @apply text-base font-bold;
 }
 
 .totalContainer {
-  @apply flex justify-between items-center text-xl font-bold; /* Flexbox 설정, 글자 크기, 폰트 굵기 */
+  @apply py-2 flex justify-between items-center text-xl font-bold;
+}
+
+.orderSummaryCard {
+  @apply max-w-3xl mx-auto px-6 py-6 mb-6 rounded-lg shadow-md border border-gray-300;
 }

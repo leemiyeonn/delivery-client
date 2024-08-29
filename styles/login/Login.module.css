@@ -1,0 +1,43 @@
+.container {
+  @apply min-h-screen flex flex-col items-center px-4 sm:px-6 lg:px-8;
+}
+
+.formWrapper {
+  @apply w-full max-w-md mt-24 mb-12 text-center;
+}
+
+.title {
+  @apply text-3xl font-extrabold text-gray-900 mb-6;
+}
+
+.form {
+  @apply space-y-6 bg-white p-8 rounded-lg border border-gray-200 shadow-md;
+}
+
+.errorMessage {
+  @apply mb-4 text-red-500 text-center;
+}
+
+.inputWrapper {
+  @apply mb-4;
+}
+
+.label {
+  @apply block text-left text-gray-700 text-sm font-medium mb-2;
+}
+
+.input {
+  @apply block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.submitButton {
+  @apply w-full px-6 py-3 rounded-md bg-blue-500 text-white font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-150 ease-in-out;
+}
+
+.signupText {
+  @apply text-center text-gray-600;
+}
+
+.signupLink {
+  @apply text-blue-600 hover:text-blue-700 font-semibold;
+}

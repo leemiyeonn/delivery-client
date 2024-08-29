@@ -1,0 +1,52 @@
+/* Container */
+.container {
+  @apply max-w-full mx-auto px-4 py-8 min-h-screen;
+}
+
+/* Header */
+.header {
+  @apply flex justify-between items-center mb-8;
+}
+
+/* Title */
+.headerTitle {
+  @apply text-3xl leading-10 font-bold mb-8 text-gray-800;
+}
+
+/* Category Buttons Container */
+.categoryButtons {
+  @apply flex flex-wrap gap-4;
+}
+
+/* Category Button */
+.categoryButton {
+  @apply px-4 py-2 rounded-full font-semibold transition-colors;
+}
+
+.categoryButtonActive {
+  @apply bg-blue-500 text-white;
+}
+
+.categoryButtonInactive {
+  @apply bg-gray-200 text-gray-800 hover:bg-gray-300;
+}
+
+/* Grid Container */
+.gridContainer {
+  @apply mb-8;
+}
+
+/* Grid Header */
+.gridHeader {
+  @apply text-2xl font-bold mb-4;
+}
+
+/* Grid Navigation Button */
+.gridNavigationButton {
+  @apply p-2 rounded-full bg-gray-200 text-gray-800 disabled:opacity-50;
+}
+
+/* Store Card Wrapper */
+.storeCardWrapper {
+  @apply h-44;
+}

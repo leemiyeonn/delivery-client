@@ -1,0 +1,67 @@
+.container {
+  @apply max-w-full mx-auto px-4 py-8 min-h-screen;
+}
+
+.storeHeader {
+  @apply flex justify-between items-center mb-4 text-3xl leading-10 font-bold text-gray-800;
+}
+
+.storeDescription {
+  @apply text-gray-600 mb-8 text-lg;
+}
+
+.menuSection {
+  @apply flex justify-between items-center mb-6;
+}
+
+.menuHeader {
+  @apply text-3xl font-bold mt-4 mb-4;
+}
+
+.cartButton {
+  @apply bg-green-500 text-white text-lg px-4 py-2 rounded hover:bg-green-600;
+}
+
+.warningContainer {
+  @apply bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6;
+}
+
+.productCard {
+  @apply flex items-center space-x-4 p-6 bg-white rounded-lg shadow;
+}
+
+.productImage {
+  @apply w-32 h-32 object-cover rounded;
+}
+
+.productInfo {
+  @apply flex-grow;
+}
+
+.productName {
+  @apply text-xl font-semibold;
+}
+
+.productDescription {
+  @apply text-gray-600 mt-2;
+}
+
+.productPrice {
+  @apply text-xl font-bold mt-2;
+}
+
+.quantityControls {
+  @apply flex items-center space-x-2;
+}
+
+.quantityButton {
+  @apply px-4 py-2 bg-gray-200 rounded text-lg;
+}
+
+.quantityDisplay {
+  @apply text-lg font-medium w-10 text-center;
+}
+
+.addToCartButton {
+  @apply px-4 py-3 bg-blue-500 text-white rounded hover:bg-blue-600 text-lg disabled:bg-gray-400;
+}

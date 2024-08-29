@@ -1,8 +1,8 @@
 import { NextPage, GetStaticProps, GetStaticPaths } from "next";
-import Link from "next/link";
-import OrderSummary from "../../components/OrderSummary";
-import { Order } from "../../types/Order";
-import { getOrdersData, getOrderData } from "../../lib/order";
+import { useRouter } from "next/router";
+import OrderSummary from "../../components/orders/OrderSummary";
+import { Order } from "../../types/orders/Order";
+import { getOrdersData, getOrderData } from "../../lib/data/orderData";
 import styles from "../../styles/order/OrderDetail.module.css";
 
 interface OrderDetailProps {
@@ -10,22 +10,27 @@ interface OrderDetailProps {
 }
 
 const OrderDetail: NextPage<OrderDetailProps> = ({ order }) => {
+  const router = useRouter();
+
   if (!order) {
     return <div>Order not found</div>;
   }
 
-  return (
-    <div className="min-h-screen">
-      <header className={styles.header}>
-        <h1 className={styles.headerTitle}>🛒 Order Details</h1>
-        <Link href="/orders" className={styles.backButton}>
-          Back to Orders
-        </Link>
-      </header>
+  const handleBackClick = () => {
+    router.back();
+  };
 
-      <main className={styles.main}>
+  return (
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h1 className={styles.heading}> 🏷️ Order Details </h1>
+        <button onClick={handleBackClick} className={styles.backButton}>
+          Back to Orders
+        </button>
+      </div>
+      <div className={styles.card}>
         <OrderSummary order={order} />
-      </main>
+      </div>
     </div>
   );
 };
