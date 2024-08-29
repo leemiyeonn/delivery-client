@@ -5,6 +5,13 @@ import { Store } from "../types/Store";
 import { Product } from "../types/Product";
 import path from "path";
 import fs from "fs";
+import styles from "../styles/store/StoresPage.module.css";
+import {
+  sortStores,
+  paginateStores,
+  calculatePageCount,
+  SortOption,
+} from "../utils/store/Stores";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -13,41 +20,28 @@ interface StoresPageProps {
   products: Product[];
 }
 
-type SortOption = "name_asc" | "name_desc" | "date_asc" | "date_desc";
-
 const StoresPage: NextPage<StoresPageProps> = ({ stores, products }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOption, setSortOption] = useState<SortOption>("name_asc");
 
-  const sortedStores = useMemo(() => {
-    return [...stores].sort((a, b) => {
-      const [field, direction] = sortOption.split("_");
-      const multiplier = direction === "asc" ? 1 : -1;
+  const sortedStores = useMemo(
+    () => sortStores(stores, sortOption),
+    [stores, sortOption]
+  );
 
-      switch (field) {
-        case "name":
-          return multiplier * a.name.localeCompare(b.name);
-        case "date":
-          return (
-            multiplier *
-            (new Date(a.created_at).getTime() -
-              new Date(b.created_at).getTime())
-          );
-        default:
-          return 0;
-      }
-    });
-  }, [stores, sortOption]);
+  const pageCount = useMemo(
+    () => calculatePageCount(sortedStores, ITEMS_PER_PAGE),
+    [sortedStores]
+  );
 
-  const pageCount = Math.ceil(sortedStores.length / ITEMS_PER_PAGE);
-  const currentStores = sortedStores.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
+  const currentStores = useMemo(
+    () => paginateStores(sortedStores, currentPage, ITEMS_PER_PAGE),
+    [sortedStores, currentPage]
   );
 
   const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSortOption(e.target.value as SortOption);
-    setCurrentPage(1);
+    setCurrentPage(1); // Reset to first page on sort change
   };
 
   const handlePageChange = (delta: number) => {
@@ -55,16 +49,16 @@ const StoresPage: NextPage<StoresPageProps> = ({ stores, products }) => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">🛍️ Stores</h1>
-        <div className="flex items-center">
-          <label htmlFor="sort" className="mr-2 text-gray-700"></label>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h1 className={styles.title}>🛍️ Stores</h1>
+        <div className={styles.sortContainer}>
+          <label htmlFor="sort" className={styles.sortLabel}></label>
           <select
             id="sort"
             value={sortOption}
             onChange={handleSortChange}
-            className="p-2 border rounded-md bg-transparent text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:border-blue-200"
+            className={styles.sortSelect}
           >
             <option value="name_asc">Name (A-Z)</option>
             <option value="name_desc">Name (Z-A)</option>
@@ -74,7 +68,7 @@ const StoresPage: NextPage<StoresPageProps> = ({ stores, products }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+      <div className={styles.gridContainer}>
         {currentStores.map((store) => (
           <StoreCard
             key={store.id}
@@ -86,11 +80,11 @@ const StoresPage: NextPage<StoresPageProps> = ({ stores, products }) => {
         ))}
       </div>
 
-      <div className="flex items-center justify-center gap-4 mt-8">
+      <div className={styles.paginationContainer}>
         <button
           onClick={() => handlePageChange(-1)}
           disabled={currentPage === 1}
-          className="p-2 rounded-full bg-gray-200 text-gray-800 disabled:opacity-50"
+          className={styles.paginationButton}
           aria-label="Previous page"
         >
           &#9664;
@@ -101,7 +95,7 @@ const StoresPage: NextPage<StoresPageProps> = ({ stores, products }) => {
         <button
           onClick={() => handlePageChange(1)}
           disabled={currentPage === pageCount}
-          className="p-2 rounded-full bg-gray-200 text-gray-800 disabled:opacity-50"
+          className={styles.paginationButton}
           aria-label="Next page"
         >
           &#9654;
