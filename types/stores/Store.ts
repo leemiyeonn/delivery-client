@@ -1,4 +1,4 @@
-import { Product } from "./Product";
+import { Product } from "../products/Product";
 
 export interface Store extends BaseModel {
   id: string;

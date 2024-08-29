@@ -1,5 +1,5 @@
 import { Order } from "./Order";
-import { Store } from "./Store";
+import { Store } from "../stores/Store";
 
 export interface OrderSummary {
   order: Order;
