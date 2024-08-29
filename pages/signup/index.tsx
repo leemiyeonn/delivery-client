@@ -1,11 +1,14 @@
 import { NextPage } from "next";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import Link from "next/link";
+import styles from "../../styles/auth/SignUp.module.css";
 
 const Signup: NextPage = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -15,20 +18,13 @@ const Signup: NextPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-md mt-24 mb-12">
-        <h1 className="text-3xl font-extrabold text-gray-900 mb-6 text-center">
-          Sign Up
-        </h1>
-        <form
-          onSubmit={handleSubmit}
-          className="space-y-6 bg-white p-8 rounded-lg border border-gray-200 shadow-md"
-        >
-          <div>
-            <label
-              htmlFor="name"
-              className="block text-gray-700 text-sm font-medium mb-2"
-            >
+    <div className={styles.container}>
+      <div className={styles.formWrapper}>
+        <h1 className={styles.title}>Sign Up</h1>
+        {error && <div className={styles.errorMessage}>{error}</div>}
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <div className={styles.inputWrapper}>
+            <label htmlFor="name" className={styles.label}>
               Name
             </label>
             <input
@@ -36,16 +32,13 @@ const Signup: NextPage = () => {
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={styles.input}
               placeholder="Enter your name"
               required
             />
           </div>
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-gray-700 text-sm font-medium mb-2"
-            >
+          <div className={styles.inputWrapper}>
+            <label htmlFor="email" className={styles.label}>
               Email
             </label>
             <input
@@ -53,16 +46,13 @@ const Signup: NextPage = () => {
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={styles.input}
               placeholder="Enter your email"
               required
             />
           </div>
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-gray-700 text-sm font-medium mb-2"
-            >
+          <div className={styles.inputWrapper}>
+            <label htmlFor="password" className={styles.label}>
               Password
             </label>
             <input
@@ -70,17 +60,21 @@ const Signup: NextPage = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="block w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={styles.input}
               placeholder="Enter your password"
               required
             />
           </div>
-          <button
-            type="submit"
-            className="w-full px-6 py-3 rounded-md bg-blue-500 text-white font-medium hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-150 ease-in-out"
-          >
+          <button type="submit" className={styles.submitButton}>
             Sign Up
           </button>
+
+          <p className={styles.signupText}>
+            Already have an account?{" "}
+            <Link href="/login" className={styles.signupLink}>
+              Log In
+            </Link>
+          </p>
         </form>
       </div>
     </div>

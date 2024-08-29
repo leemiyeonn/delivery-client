@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import styles from "../../styles/login/Login.module.css";
+import styles from "../../styles/auth/Login.module.css";
 
 const Login: NextPage = () => {
   const [email, setEmail] = useState("");
@@ -63,9 +63,9 @@ const Login: NextPage = () => {
           </button>
           <div className={styles.signupText}>
             <p>
-              계정이 없으신가요?{" "}
+              Do not have an account?{" "}
               <Link href="/signup" className={styles.signupLink}>
-                가입하기
+                Sign Up
               </Link>
             </p>
           </div>
