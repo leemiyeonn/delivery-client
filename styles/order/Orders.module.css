@@ -1,119 +1,67 @@
 /* Container */
 .container {
-  max-width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-  min-height: 100vh;
+  @apply max-w-full mx-auto px-4 py-8 min-h-screen; /* 최대 너비, 자동 마진, 패딩, 최소 높이 */
 }
 
 /* Header */
 .heading {
-  font-size: 2.25rem;
-  line-height: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 2rem;
-  color: #1f2937;
-}
-
-/* Grid */
-.grid {
-  display: grid;
-  gap: 1.5rem;
-}
-
-@media (min-width: 768px) {
-  .grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1024px) {
-  .grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
+  @apply text-3xl leading-10 font-bold mb-8 text-gray-800; /* 글자 크기, 줄 높이, 폰트 굵기, 마진, 색상 */
 }
 
 /* Card */
 .card {
-  background-color: #ffffff;
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  transition: box-shadow 0.3s ease;
-  cursor: pointer;
-  overflow: hidden;
+  @apply bg-white rounded-lg shadow-md border border-gray-300 transition-shadow duration-300 ease-in-out cursor-pointer overflow-hidden mb-6; /* 배경색, 둥근 모서리, 그림자, 전환 효과, 커서, 오버플로우 숨김, 카드 사이의 간격 */
 }
 
 .card:hover {
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  @apply shadow-lg; /* 호버 시 더 큰 그림자 */
 }
 
 /* Card Header */
 .cardHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem;
+  @apply flex justify-between items-center p-6; /* Flexbox 설정, 패딩 */
 }
 
 /* Order ID */
 .orderId {
-  font-size: 1.25rem;
-  line-height: 1.75rem;
-  font-weight: 600;
-  color: #1f2937;
+  @apply text-xl leading-7 font-semibold text-gray-800 mb-1; /* 글자 크기, 줄 높이, 폰트 굵기, 색상 */
 }
 
 /* Status Badge */
 .statusBadge {
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  line-height: 1.25rem;
-  font-weight: 500;
+  @apply py-1 px-3 rounded-full text-sm leading-5 font-medium; /* 패딩, 둥근 모서리, 글자 크기, 줄 높이, 폰트 굵기 */
 }
 
 /* Order Details */
 .orderDetails {
-  padding: 0 1.5rem 1.5rem;
+  @apply px-6 pb-6; /* 패딩 설정 */
 }
 
 .orderDetail {
-  color: #4b5563;
-  margin-top: 0.75rem;
+  @apply text-gray-600 mt-3; /* 글자 색상, 마진 */
 }
 
 .orderDetailLabel {
-  font-weight: 500;
-  color: #1f2937;
+  @apply font-medium text-gray-800; /* 폰트 굵기, 색상 */
 }
 
 /* Status Colors */
 .statusPending {
-  background-color: #fef3c7;
-  color: #92400e;
+  @apply bg-yellow-100 text-yellow-800; /* 배경색, 글자 색상 */
 }
 
 .statusProcessing {
-  background-color: #dbeafe;
-  color: #1e40af;
+  @apply bg-blue-100 text-blue-800; /* 배경색, 글자 색상 */
 }
 
 .statusShipped {
-  background-color: #d1fae5;
-  color: #065f46;
+  @apply bg-green-100 text-green-800; /* 배경색, 글자 색상 */
 }
 
 .statusDelivered {
-  background-color: #ede9fe;
-  color: #5b21b6;
+  @apply bg-purple-100 text-purple-800; /* 배경색, 글자 색상 */
 }
 
 .statusCancelled {
-  background-color: #fee2e2;
-  color: #991b1b;
+  @apply bg-red-100 text-red-800; /* 배경색, 글자 색상 */
 }

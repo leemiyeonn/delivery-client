@@ -1,57 +1,39 @@
 .container {
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  border-radius: 0.75rem;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  border: 1px solid #e5e7eb;
+  @apply p-8 mb-6 rounded-lg shadow-md border border-gray-300; /* 패딩, 마진, 둥근 모서리, 그림자, 테두리 */
 }
 
 .orderHeader {
-  font-size: 1.25rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
+  @apply text-2xl font-bold mb-4; /* 글자 크기, 폰트 굵기, 마진 */
 }
 
 .orderText {
-  color: #4b5563;
-  margin-bottom: 0.5rem;
+  @apply text-gray-600 mb-2; /* 글자 색상, 마진 */
 }
 
 .orderProductsHeader {
-  font-size: 1.125rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
+  @apply text-2xl font-bold mb-4; /* 글자 크기, 폰트 굵기, 마진 */
 }
 
 .productList {
-  border-top: 1px solid #e5e7eb;
+  @apply border-t border-gray-300; /* 테두리 */
 }
 
 .productItem {
-  padding: 1rem 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  @apply py-4 flex justify-between items-center; /* 패딩, Flexbox 설정 */
 }
 
 .productName {
-  font-size: 1rem;
-  font-weight: 600;
+  @apply text-base font-semibold; /* 글자 크기, 폰트 굵기 */
 }
 
 .productQuantity {
-  color: #6b7280;
+  @apply text-gray-500; /* 글자 색상 */
 }
 
 .productPrice {
-  font-size: 1rem;
-  font-weight: bold;
+  @apply text-base font-bold; /* 글자 크기, 폰트 굵기 */
 }
 
 .totalContainer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 1.25rem;
-  font-weight: bold;
+  @apply flex justify-between items-center text-xl font-bold; /* Flexbox 설정, 글자 크기, 폰트 굵기 */
 }

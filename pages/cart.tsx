@@ -1,13 +1,13 @@
 import { NextPage } from "next";
-import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "../contexts/CartContext";
 import { CartProduct } from "../types/CartProduct";
 import { useRouter } from "next/router";
+import styles from "../styles/cart/cart.module.css";
 
 const EmptyCart: React.FC = () => (
-  <div className="p-6 text-center">
-    <p className="text-xl text-gray-600 mb-4">Your cart is empty.</p>
+  <div className={styles.emptyCart}>
+    <p className={styles.emptyCartText}>Your cart is empty.</p>
   </div>
 );
 
@@ -31,9 +31,9 @@ const CartProductComponent: React.FC<CartProductProps> = ({
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg border border-gray-200 mb-4">
+    <div className={styles.cartProductContainer}>
       <div className="flex items-center">
-        <div className="w-24 h-24 mr-6 relative">
+        <div className={styles.productImageContainer}>
           <Image
             src={getImageSrc(product)}
             alt={product.name}
@@ -47,19 +47,15 @@ const CartProductComponent: React.FC<CartProductProps> = ({
             }}
           />
         </div>
-        <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-800">
-            {product.name}
-          </h3>
-          <p className="text-gray-600">{product.description}</p>
-          <p className="text-gray-900 font-bold mt-2">
-            ${product.price.toFixed(2)}
-          </p>
+        <div className={styles.productInfo}>
+          <h3 className={styles.productName}>{product.name}</h3>
+          <p className={styles.productDescription}>{product.description}</p>
+          <p className={styles.productPrice}>${product.price.toFixed(2)}</p>
         </div>
-        <div className="flex items-center">
+        <div className={styles.productControls}>
           <button
             onClick={() => onQuantityChange(product.id, product.quantity - 1)}
-            className="px-3 py-1 text-gray-600 hover:text-gray-800"
+            className={styles.quantityButton}
             disabled={product.quantity <= 1}
           >
             -
@@ -71,17 +67,17 @@ const CartProductComponent: React.FC<CartProductProps> = ({
             onChange={(e) =>
               onQuantityChange(product.id, parseInt(e.target.value, 10))
             }
-            className="w-16 text-center border border-gray-300 rounded-md mx-2"
+            className={styles.quantityInput}
           />
           <button
             onClick={() => onQuantityChange(product.id, product.quantity + 1)}
-            className="px-3 py-1 text-gray-600 hover:text-gray-800"
+            className={styles.quantityButton}
           >
             +
           </button>
           <button
             onClick={() => onRemove(product.id)}
-            className="ml-4 text-red-500 hover:text-red-700"
+            className={styles.removeButton}
           >
             Remove
           </button>
@@ -104,21 +100,25 @@ const Cart: NextPage = () => {
     router.push("/orders");
   };
 
+  const handleContinueShopping = () => {
+    router.back();
+  };
+
   return (
     <div className="min-h-screen">
       <header>
-        <div className="container mx-auto px-4 py-6 flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-gray-800">🛒 Your Cart</h1>
-          <Link
-            href="/stores"
-            className="inline-block px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition duration-300"
+        <div className={styles.headerContainer}>
+          <h1 className={styles.headerTitle}>🛒 Your Cart</h1>
+          <button
+            onClick={handleContinueShopping}
+            className={styles.continueShoppingButton}
           >
             Continue Shopping
-          </Link>
+          </button>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8">
+      <main className={styles.mainContainer}>
         {items.length === 0 && <EmptyCart />}
         {items.length > 0 && (
           <div className="space-y-4">
@@ -130,16 +130,16 @@ const Cart: NextPage = () => {
                 onRemove={removeFromCart}
               />
             ))}
-            <div className="bg-white p-6 rounded-lg border border-gray-200">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-2xl font-semibold">Total:</span>
-                <span className="text-2xl font-bold">
+            <div className={styles.totalContainer}>
+              <div className={styles.totalRow}>
+                <span className={styles.totalText}>Total:</span>
+                <span className={styles.totalPrice}>
                   ${totalPrice.toFixed(2)}
                 </span>
               </div>
               <button
                 onClick={handleCheckout}
-                className="w-full bg-purple-500 text-white px-10 py-3 rounded-md text-lg font-semibold hover:bg-purple-600 transition duration-300"
+                className={`${styles.checkoutButton} mt-6`}
               >
                 Proceed to Checkout
               </button>

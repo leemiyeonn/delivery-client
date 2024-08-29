@@ -1,61 +1,37 @@
+/* YourComponent.module.css */
+
 .container {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding-left: 1rem;
-  padding-right: 1rem;
+  @apply min-h-screen flex flex-col items-center px-8;
 }
 
 .header {
-  width: 100%;
-  max-width: 64rem;
-  margin-top: 8rem;
-  margin-bottom: 2rem;
-  text-align: center;
+  @apply w-full max-w-6xl mt-40 mb-12 text-center;
 }
 
 .title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: #1f2937;
+  @apply text-5xl font-extrabold text-gray-800;
 }
 
 .searchContainer {
-  width: 100%;
-  max-width: 38rem;
+  @apply w-full max-w-2xl;
 }
 
 .form {
-  display: flex;
-  gap: 1rem;
+  @apply flex gap-6;
 }
 
 .input {
-  flex-grow: 1;
-  padding: 0.75rem 1rem;
-  border-radius: 0.75rem;
-  font-size: 1rem;
-  color: #6b7280;
-  background-color: #f3f4f6;
+  @apply flex-grow p-4 rounded-xl text-lg text-gray-600 bg-gray-100;
 }
 
 .input:focus {
-  outline: none;
-  background-color: #e5e7eb;
+  @apply outline-none bg-gray-200;
 }
 
 .button {
-  padding: 0.75rem 1rem;
-  border-radius: 0.75rem;
-  background-color: #3b82f6;
-  color: white;
-  font-weight: 500;
-  font-size: 1rem;
-  border: none;
-  cursor: pointer;
+  @apply p-4 rounded-xl bg-blue-500 text-white font-semibold text-lg border-none cursor-pointer;
 }
 
 .button:hover {
-  background-color: #2563eb;
+  @apply bg-blue-700;
 }
