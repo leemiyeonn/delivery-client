@@ -1,10 +1,8 @@
 import { NextPage, GetStaticProps } from "next";
 import Link from "next/link";
-import path from "path";
-import fs from "fs";
 import { Order } from "../../types/Order";
+import { getOrdersData } from "../../lib/order";
 import styles from "../../styles/order/Orders.module.css";
-import { ORDER_STATUS_COLORS } from "../../constants/orderStatusColors";
 
 interface OrdersProps {
   orders: Order[];
@@ -51,18 +49,8 @@ const Orders: NextPage<OrdersProps> = ({ orders }) => {
 };
 
 export const getStaticProps: GetStaticProps<OrdersProps> = async () => {
-  const ordersFilePath = path.join(
-    process.cwd(),
-    "public",
-    "data",
-    "orders.json"
-  );
-  const ordersFileContents = fs.readFileSync(ordersFilePath, "utf8");
-  const orders: Order[] = JSON.parse(ordersFileContents);
-
-  return {
-    props: { orders },
-  };
+  const orders = getOrdersData();
+  return { props: { orders } };
 };
 
 export default Orders;

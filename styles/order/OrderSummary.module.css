@@ -1,0 +1,57 @@
+.container {
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+}
+
+.orderHeader {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.orderText {
+  color: #4b5563;
+  margin-bottom: 0.5rem;
+}
+
+.orderProductsHeader {
+  font-size: 1.125rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.productList {
+  border-top: 1px solid #e5e7eb;
+}
+
+.productItem {
+  padding: 1rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.productName {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.productQuantity {
+  color: #6b7280;
+}
+
+.productPrice {
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.totalContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.25rem;
+  font-weight: bold;
+}

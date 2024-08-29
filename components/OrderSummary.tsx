@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "../styles/order/OrderSummary.module.css";
 import { OrderSummary as OrderSummaryType } from "../types/OrderSummary";
 import { OrderProduct } from "../types/OrderProduct";
 
@@ -9,31 +10,30 @@ type OrderSummaryProps = Omit<OrderSummaryType, "store"> & {
 const OrderSummary: React.FC<OrderSummaryProps> = ({ order, store }) => {
   return (
     <>
-      <div className="p-6 mb-6 rounded-lg shadow-md border border-gray-200">
-        <h2 className="text-2xl font-bold mb-4">
+      <div className={styles.container}>
+        <h2 className={styles.orderHeader}>
           Order from {store ? store.name : order.storeName}
         </h2>
-        <p className="text-gray-700 mb-2">Order ID: {order.id}</p>
-        <p className="text-gray-700 mb-2">Store: {order.storeName}</p>
-        <p className="text-gray-700 mb-2">Status: {order.status}</p>
-        <p className="text-gray-700 mb-2">
+        <p className={styles.orderText}>Order ID: {order.id}</p>
+        <p className={styles.orderText}>Store: {order.storeName}</p>
+        <p className={styles.orderText}>Status: {order.status}</p>
+        <p className={styles.orderText}>
           Order Date: {new Date(order.orderDate).toLocaleString()}
         </p>
       </div>
 
-      <div className="p-6 mb-6 rounded-lg shadow-md border border-gray-200">
-        <h3 className="text-xl font-bold mb-4">Order products</h3>
-        <ul className="divide-y divide-gray-200">
+      <div className={styles.container}>
+        <h3 className={styles.orderProductsHeader}>Order products</h3>
+        <ul className={styles.productList}>
           {order.products.map((product: OrderProduct) => (
-            <li
-              key={product.id}
-              className="py-4 flex justify-between items-center"
-            >
+            <li key={product.id} className={styles.productItem}>
               <div>
-                <p className="text-lg font-semibold">{product.name}</p>
-                <p className="text-gray-600">Quantity: {product.quantity}</p>
+                <p className={styles.productName}>{product.name}</p>
+                <p className={styles.productQuantity}>
+                  Quantity: {product.quantity}
+                </p>
               </div>
-              <p className="text-lg font-bold">
+              <p className={styles.productPrice}>
                 ${(product.price * product.quantity).toFixed(2)}
               </p>
             </li>
@@ -41,8 +41,8 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({ order, store }) => {
         </ul>
       </div>
 
-      <div className="p-6 rounded-lg shadow-md border border-gray-200">
-        <div className="flex justify-between items-center text-xl font-bold">
+      <div className={styles.container}>
+        <div className={styles.totalContainer}>
           <span>Total:</span>
           <span>${order.total.toFixed(2)}</span>
         </div>
