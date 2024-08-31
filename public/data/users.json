@@ -1,0 +1,26 @@
+[
+  {
+    "id": "1",
+    "name": "John Doe",
+    "email": "johndoe@example.com",
+    "password": "hashed_password_123",
+    "address": "123 Main St, Cityville",
+    "role": "USER"
+  },
+  {
+    "id": "2",
+    "name": "Jane Smith",
+    "email": "janesmith@example.com",
+    "password": "hashed_password_456",
+    "address": "456 Side St, Townsville",
+    "role": "ADMIN"
+  },
+  {
+    "id": "3",
+    "name": "Alice Johnson",
+    "email": "alicejohnson@example.com",
+    "password": "hashed_password_789",
+    "address": "789 High St, Village",
+    "role": "STORE_OWNER"
+  }
+]

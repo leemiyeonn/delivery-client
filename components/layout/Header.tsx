@@ -26,6 +26,12 @@ const Header: React.FC = () => {
         </Link>
         <div className="hidden md:flex space-x-6 products-center">
           <Link
+            href="/admin"
+            className="text-lg text-gray-600 hover:text-blue-600 transition duration-300"
+          >
+            Admin
+          </Link>
+          <Link
             href="/stores"
             className="text-lg text-gray-600 hover:text-blue-600 transition duration-300"
           >

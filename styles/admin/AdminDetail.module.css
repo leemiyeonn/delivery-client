@@ -1,0 +1,68 @@
+/* Container */
+.container {
+  @apply max-w-full mx-auto px-4 py-8 min-h-screen; /* 최대 너비, 자동 마진, 패딩, 최소 높이 */
+}
+
+/* Header */
+.heading {
+  @apply text-4xl leading-10 font-bold mb-10 text-gray-900 flex items-center; /* 글자 크기, 줄 높이, 폰트 굵기, 마진, 색상, 아이템 정렬 */
+}
+
+/* Card */
+.card {
+  @apply bg-white rounded-lg shadow-md border border-gray-300 
+  transition-shadow duration-300 ease-in-out cursor-pointer overflow-hidden mb-6; /* 배경색, 둥근 모서리, 그림자, 전환 효과, 커서, 오버플로우 숨김, 카드 사이의 간격 */
+}
+
+.card:hover {
+  @apply shadow-lg; /* 호버 시 더 큰 그림자 */
+}
+
+/* Card Content */
+.cardHeader {
+  @apply p-6; /* Flexbox 설정, 패딩 */
+}
+
+.userName,
+.orderId,
+.storeName,
+.productName {
+  @apply text-2xl leading-7 font-semibold text-gray-900 mb-1 mt-2 py-2 px-2; /* 글자 크기, 줄 높이, 폰트 굵기, 색상 */
+}
+
+.userDetail,
+.orderDetail,
+.storeDetail,
+.productDetail {
+  @apply text-gray-700 text-sm py-1 px-2; /* 글자 색상, 마진, 글자 크기 */
+}
+
+/* Hover Effects */
+.card:hover .userName,
+.card:hover .orderId,
+.card:hover .storeName,
+.card:hover .productName {
+  @apply text-purple-700; /* 호버 시 색상 변경 */
+}
+
+/* Pagination */
+.pagination {
+  @apply flex justify-center items-center space-x-2 mt-6; /* Flexbox 설정, 공간 추가 */
+}
+
+.pagination button {
+  @apply px-4 py-2 rounded-md bg-gray-200 text-gray-800 disabled:opacity-50 transition-colors duration-200; /* 버튼 스타일, 전환 효과 */
+}
+
+.pagination span {
+  @apply text-gray-700; /* 페이지 정보 색상 */
+}
+
+.pagination button:hover:not(:disabled) {
+  @apply bg-gray-300; /* 호버 시 배경색 변경 */
+}
+
+/* Additional Styling for Empty State */
+.emptyState {
+  @apply text-center text-gray-500 mt-8; /* 비어있을 때의 스타일 */
+}

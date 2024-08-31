@@ -48,3 +48,33 @@ export const getStoreAndProducts = (
 
   return { store, products };
 };
+
+// admin
+
+export const getStoreDataWithProducts = (
+  id: string
+): { store: Store | null; products: Product[] } => {
+  const { stores, products } = getStoresAndProductsData();
+
+  const store = stores.find((s) => s.id === id) || null;
+  const storeProducts = products.filter((product) => product.storeId === id);
+
+  return { store, products: storeProducts };
+};
+
+export const getStoresAndProductsData = (): {
+  stores: Store[];
+  products: Product[];
+} => {
+  const storesFileContents = fs.readFileSync(storesFilePath, "utf8");
+  const parsedData = JSON.parse(storesFileContents);
+
+  const stores: Store[] = parsedData.flatMap(
+    (category: any) => category.stores || []
+  );
+  const products: Product[] = parsedData.flatMap(
+    (category: any) => category.products || []
+  );
+
+  return { stores, products };
+};
