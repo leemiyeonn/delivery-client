@@ -4,17 +4,49 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import styles from "../../styles/auth/SignUp.module.css";
 
+const SIGNUP_API_URL = "http://localhost:8080/api/v1/auth/signUp";
+
 const Signup: NextPage = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [nickname, setNickname] = useState("");
+  const [address, setAddress] = useState("");
+  const [request, setRequest] = useState("");
+  const [region, setRegion] = useState("지역"); // Set default region
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // 회원가입 처리 로직 (임시로 페이지 이동)
-    router.push("/profile"); // 회원가입 후 프로필 페이지로 이동
+    setError(null);
+
+    try {
+      const response = await fetch(SIGNUP_API_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          password,
+          nickname,
+          address,
+          request,
+          role: "ADMIN",
+          regionName: region, // Send the selected region
+        }),
+      });
+
+      if (response.ok) {
+        alert("회원가입이 완료되었습니다. 로그인 페이지로 이동합니다.");
+        router.push("/login");
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || "An error occurred during signup.");
+      }
+    } catch (error) {
+      setError("Failed to connect to the server. Please try again later.");
+    }
   };
 
   return (
@@ -24,30 +56,16 @@ const Signup: NextPage = () => {
         {error && <div className={styles.errorMessage}>{error}</div>}
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.inputWrapper}>
-            <label htmlFor="name" className={styles.label}>
-              Name
+            <label htmlFor="username" className={styles.label}>
+              Username
             </label>
             <input
-              id="name"
+              id="username"
               type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className={styles.input}
-              placeholder="Enter your name"
-              required
-            />
-          </div>
-          <div className={styles.inputWrapper}>
-            <label htmlFor="email" className={styles.label}>
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className={styles.input}
-              placeholder="Enter your email"
+              placeholder="Enter your username"
               required
             />
           </div>
@@ -64,6 +82,68 @@ const Signup: NextPage = () => {
               placeholder="Enter your password"
               required
             />
+          </div>
+          <div className={styles.inputWrapper}>
+            <label htmlFor="nickname" className={styles.label}>
+              Nickname
+            </label>
+            <input
+              id="nickname"
+              type="text"
+              value={nickname}
+              onChange={(e) => setNickname(e.target.value)}
+              className={styles.input}
+              placeholder="Enter your nickname"
+              required
+            />
+          </div>
+          <div className={styles.inputWrapper}>
+            <label htmlFor="address" className={styles.label}>
+              Address
+            </label>
+            <input
+              id="address"
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              className={styles.input}
+              placeholder="Enter your address"
+              required
+            />
+          </div>
+          <div className={styles.inputWrapper}>
+            <label htmlFor="request" className={styles.label}>
+              Request
+            </label>
+            <input
+              id="request"
+              type="text"
+              value={request}
+              onChange={(e) => setRequest(e.target.value)}
+              className={styles.input}
+              placeholder="Enter your request"
+              required
+            />
+          </div>
+          <div className={styles.inputWrapper}>
+            <label htmlFor="region" className={styles.label}>
+              Region
+            </label>
+            <select
+              id="region"
+              value={region}
+              onChange={(e) => setRegion(e.target.value)}
+              className={styles.input}
+            >
+              <option value="지역">지역</option>
+              <option value="서비스 지역 추가 예정" disabled>
+                서비스 지역 추가 예정
+              </option>
+              <option value="서비스 지역 추가 예정" disabled>
+                서비스 지역 추가 예정
+              </option>
+              {/* Add more regions as needed */}
+            </select>
           </div>
           <button type="submit" className={styles.submitButton}>
             Sign Up
