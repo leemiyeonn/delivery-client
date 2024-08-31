@@ -3,13 +3,11 @@ import Link from "next/link";
 import { useAuth } from "../../contexts/auth/AuthContext";
 
 const Header: React.FC = () => {
-  const { user, logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
 
   const handleLogout = async () => {
     try {
       await logout();
-      // 로그아웃 후 홈 페이지로 리다이렉트하거나 적절한 페이지로 이동
-      window.location.href = "/";
     } catch (error) {
       console.error("로그아웃 실패", error);
     }
@@ -17,20 +15,14 @@ const Header: React.FC = () => {
 
   return (
     <header className="bg-white">
-      <nav className="container mx-auto px-6 py-5 flex products-center justify-between">
+      <nav className="container mx-auto px-6 py-5 flex items-center justify-between">
         <Link
           href="/"
           className="text-2xl font-bold text-gray-800 hover:text-blue-600 transition duration-300"
         >
           Delivery22 🛒
         </Link>
-        <div className="hidden md:flex space-x-6 products-center">
-          <Link
-            href="/admin"
-            className="text-lg text-gray-600 hover:text-blue-600 transition duration-300"
-          >
-            Admin
-          </Link>
+        <div className="hidden md:flex space-x-6 items-center">
           <Link
             href="/stores"
             className="text-lg text-gray-600 hover:text-blue-600 transition duration-300"
@@ -49,14 +41,14 @@ const Header: React.FC = () => {
           >
             Orders
           </Link>
-          {user ? (
+          {isAuthenticated ? (
             <>
-              <Link
+              {/* <Link
                 href="/profile"
                 className="text-lg text-gray-600 hover:text-blue-600 transition duration-300"
               >
                 Profile
-              </Link>
+              </Link> */}
               <button
                 onClick={handleLogout}
                 className="text-lg text-gray-600 hover:text-blue-600 transition duration-300"

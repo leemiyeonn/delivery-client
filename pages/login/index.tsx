@@ -14,16 +14,20 @@ const Login: NextPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null); // 이전 에러 메시지 초기화
     try {
-      // AuthContext의 login 함수를 직접 호출하여 인증 처리
       await login(username, password);
-
-      // 로그인 성공 시 페이지로 리디렉션
+      // 로그인 성공 시 홈 페이지로 리디렉션
       router.push("/");
     } catch (error) {
-      setError(
-        "로그인에 실패했습니다. 사용자 이름과 비밀번호를 확인하고 다시 시도해 주세요."
-      );
+      if (error instanceof Error) {
+        // 구체적인 에러 메시지가 있다면 그것을 사용
+        setError(error.message || "로그인에 실패했습니다. 다시 시도해 주세요.");
+      } else {
+        setError(
+          "로그인에 실패했습니다. 사용자 이름과 비밀번호를 확인하고 다시 시도해 주세요."
+        );
+      }
       console.error("로그인 실패", error);
     }
   };

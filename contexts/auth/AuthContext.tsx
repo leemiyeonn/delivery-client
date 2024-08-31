@@ -5,49 +5,61 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import axios from "axios";
+import {
+  login as apiLogin,
+  logout as apiLogout,
+  checkAuthStatus,
+} from "../../lib/auth";
 
 interface AuthContextType {
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-const API = "http://localhost:8080/api/v1/auth/signIn";
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isAuth, setIsAuth] = useState<boolean>(false);
 
   useEffect(() => {
-    const token = localStorage.getItem("Authorization");
-    setIsAuthenticated(!!token);
+    const checkAuth = async () => {
+      const status = await checkAuthStatus();
+      setIsAuth(status);
+    };
+    checkAuth();
   }, []);
 
   const login = async (username: string, password: string) => {
     try {
-      const response = await axios.post(API, {
-        username,
-        password,
-      });
-      const { token } = response.data;
-      localStorage.setItem("authToken", token);
-      setIsAuthenticated(true);
+      await apiLogin(username, password);
+      setIsAuth(true);
     } catch (error) {
       console.error("Login failed:", error);
       throw error;
     }
   };
 
-  const logout = () => {
-    localStorage.removeItem("authToken");
-    setIsAuthenticated(false);
+  const logout = async () => {
+    try {
+      // 서버에 로그아웃 요청 보내기
+      await apiLogout();
+
+      // 인증 상태 업데이트
+      setIsAuth(false);
+
+      // 홈으로 리다이렉트
+      // window.location.href = "/";
+    } catch (error) {
+      console.error("Logout failed:", error);
+      // 에러 처리 (사용자에게 알림 등)
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated: isAuth, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
