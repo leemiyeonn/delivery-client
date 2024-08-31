@@ -1,47 +1,35 @@
-// 임시 데이터
-const mockstores = [
-  { id: "1", name: "Pizza Place", cuisine: "Italian", rating: 4.5 },
-  { id: "2", name: "Burger Joint", cuisine: "American", rating: 4.2 },
-  { id: "3", name: "Sushi Bar", cuisine: "Japanese", rating: 4.7 },
-];
+import axios, { AxiosInstance, InternalAxiosRequestConfig } from "axios";
 
-const mockOrders: any[] = [];
+const API_BASE_URL = "http://localhost:8080/api/v1";
 
-export const fetchstores = async () => {
-  // API 호출을 시뮬레이션
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(mockstores), 500);
-  });
+const apiClient: AxiosInstance = axios.create({
+  baseURL: API_BASE_URL,
+});
+
+apiClient.interceptors.request.use(
+  (config: InternalAxiosRequestConfig) => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error: any) => {
+    return Promise.reject(error);
+  }
+);
+
+export const fetchStores = async () => {
+  const response = await apiClient.get("/stores");
+  return response.data;
 };
 
-export const fetchstoreById = async (id: string) => {
-  // API 호출을 시뮬레이션
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      const store = mockstores.find((r) => r.id === id);
-      if (store) {
-        resolve(store);
-      } else {
-        reject(new Error("store not found"));
-      }
-    }, 500);
-  });
+export const fetchStoreById = async (id: string) => {
+  const response = await apiClient.get(`/stores/${id}`);
+  return response.data;
 };
 
 export const placeOrder = async (orderData: any) => {
-  // API 호출을 시뮬레이션
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const newOrder = { ...orderData, id: Date.now().toString() };
-      mockOrders.push(newOrder);
-      resolve(newOrder);
-    }, 500);
-  });
-};
-
-export const fetchOrders = async (userId: string) => {
-  // API 호출을 시뮬레이션
-  return new Promise((resolve) => {
-    setTimeout(() => resolve(mockOrders), 500);
-  });
+  const response = await apiClient.post("/orders", orderData);
+  return response.data;
 };

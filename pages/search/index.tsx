@@ -3,8 +3,6 @@ import { NextPage, GetServerSideProps } from "next";
 import StoreCard from "../../components/stores/StoreCard";
 import { Store } from "../../types/stores/Store";
 import { Product } from "../../types/products/Product";
-import path from "path";
-import fs from "fs";
 import styles from "../../styles/store/StoresPage.module.css";
 import {
   sortStores,
@@ -12,6 +10,8 @@ import {
   calculatePageCount,
   SortOption,
 } from "../../utils/stores/StoreUtils";
+
+const API = "http://localhost:8080/api/v1/";
 
 const ITEMS_PER_PAGE = 9;
 
@@ -109,21 +109,30 @@ export const getServerSideProps: GetServerSideProps<
   StoresPageProps
 > = async () => {
   try {
-    const filePath = path.join(process.cwd(), "public", "data", "stores.json");
-    const fileContent = fs.readFileSync(filePath, "utf8");
-    const parsedData = JSON.parse(fileContent);
+    const storesResponse = await fetch(API + "/stores");
+    const productsResponse = await fetch(API + "/stores");
 
-    const stores: Store[] = parsedData.flatMap(
-      (category: any) => category.stores || []
-    );
-    const products: Product[] = parsedData.flatMap(
-      (category: any) => category.products || []
-    );
+    if (!storesResponse.ok || !productsResponse.ok) {
+      throw new Error("Failed to fetch data");
+    }
 
-    return { props: { stores, products } };
+    const stores: Store[] = await storesResponse.json();
+    const products: Product[] = await productsResponse.json();
+
+    return {
+      props: {
+        stores,
+        products,
+      },
+    };
   } catch (error) {
-    console.error("Error reading or parsing stores file:", error);
-    return { props: { stores: [], products: [] } };
+    console.error("Error fetching data:", error);
+    return {
+      props: {
+        stores: [],
+        products: [],
+      },
+    };
   }
 };
 

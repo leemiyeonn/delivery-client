@@ -1,21 +1,57 @@
-import React, { createContext, useState, useContext, useEffect } from "react";
-
-interface User {
-  id: string;
-  email: string;
-  name: string;
-}
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  ReactNode,
+} from "react";
+import axios from "axios";
 
 interface AuthContextType {
-  user: User | null;
-  loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
-  signup: (email: string, password: string, name: string) => Promise<void>;
-  error: string | null;
+  isAuthenticated: boolean;
+  login: (username: string, password: string) => Promise<void>;
+  logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const API = "http://localhost:8080/api/v1/auth/signIn";
+
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("Authorization");
+    setIsAuthenticated(!!token);
+  }, []);
+
+  const login = async (username: string, password: string) => {
+    try {
+      const response = await axios.post(API, {
+        username,
+        password,
+      });
+      const { token } = response.data;
+      localStorage.setItem("authToken", token);
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.error("Login failed:", error);
+      throw error;
+    }
+  };
+
+  const logout = () => {
+    localStorage.removeItem("authToken");
+    setIsAuthenticated(false);
+  };
+
+  return (
+    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -23,54 +59,4 @@ export const useAuth = () => {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-};
-
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      // Mock implementation for development without backend
-      setLoading(false);
-    };
-    checkAuth();
-  }, []);
-
-  const login = async (email: string, password: string) => {
-    if (email === "test@example.com" && password === "password123") {
-      setUser({ id: "1", email, name: "Test User" });
-      localStorage.setproduct("authToken", "mockToken");
-      setError(null);
-    } else {
-      setError("Invalid email or password");
-      throw new Error("Invalid email or password");
-    }
-  };
-
-  const logout = async () => {
-    setUser(null);
-    localStorage.removeproduct("authToken");
-  };
-
-  const signup = async (email: string, password: string, name: string) => {
-    // Mock implementation for development without backend
-    setUser({ id: "2", email, name });
-    localStorage.setproduct("authToken", "mockToken");
-    setError(null);
-  };
-
-  const value = {
-    user,
-    loading,
-    login,
-    logout,
-    signup,
-    error,
-  };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
