@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import { NextPage } from "next";
 import StoreCard from "../../components/stores/StoreCard";
 import { Store } from "../../types/stores/Store";
+import { Product } from "../../types/products/Product";
 import styles from "../../styles/store/StoresPage.module.css";
 import axios from "axios";
 
-const API = "http://localhost:8080/api/v1";
+const API_URL = "http://localhost:8080/api/v1";
 const ITEMS_PER_PAGE = 9;
 
 interface StoresPageProps {
@@ -20,6 +21,7 @@ interface StoresPageProps {
 
 const StoresPage: NextPage<StoresPageProps> = ({ initialStores }) => {
   const [stores, setStores] = useState(initialStores.content);
+  const [productsMap, setProductsMap] = useState<Record<string, Product[]>>({});
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(initialStores.totalPages);
 
@@ -27,13 +29,20 @@ const StoresPage: NextPage<StoresPageProps> = ({ initialStores }) => {
     fetchStores(currentPage);
   }, [currentPage]);
 
+  useEffect(() => {
+    // 각 스토어에 대한 제품 데이터 가져오기
+    stores.forEach((store) => {
+      fetchProducts(store.id);
+    });
+  }, [stores]);
+
   const fetchStores = async (page: number) => {
     try {
-      const response = await axios.get(`${API}/stores`, {
+      const response = await axios.get(`${API_URL}/stores`, {
         params: {
           page: page,
           size: ITEMS_PER_PAGE,
-          sort: "name,asc", // 기본 정렬 옵션
+          sort: "name,asc",
         },
         withCredentials: true,
       });
@@ -41,6 +50,18 @@ const StoresPage: NextPage<StoresPageProps> = ({ initialStores }) => {
       setTotalPages(response.data.data.totalPages);
     } catch (error) {
       console.error("Error fetching stores:", error);
+    }
+  };
+
+  const fetchProducts = async (storeId: string) => {
+    try {
+      const response = await axios.get(`${API_URL}/products/stores/${storeId}`);
+      setProductsMap((prev) => ({
+        ...prev,
+        [storeId]: response.data.data.content,
+      }));
+    } catch (error) {
+      console.error(`Error fetching products for store ${storeId}:`, error);
     }
   };
 
@@ -58,7 +79,11 @@ const StoresPage: NextPage<StoresPageProps> = ({ initialStores }) => {
 
       <div className={styles.gridContainer}>
         {stores.map((store) => (
-          <StoreCard key={store.id} store={store} />
+          <StoreCard
+            key={store.id}
+            store={store}
+            products={productsMap[store.id] || []} // productsMap에서 해당 스토어의 제품 배열을 전달
+          />
         ))}
       </div>
 
@@ -89,7 +114,7 @@ const StoresPage: NextPage<StoresPageProps> = ({ initialStores }) => {
 
 export async function getServerSideProps() {
   try {
-    const response = await axios.get(`${API}/stores`, {
+    const response = await axios.get(`${API_URL}/stores`, {
       params: {
         page: 0,
         size: ITEMS_PER_PAGE,
