@@ -27,7 +27,7 @@
 }
 
 .productCard {
-  @apply flex items-center space-x-4 p-6 bg-white rounded-lg shadow;
+  @apply flex items-center space-x-8 p-6 bg-white rounded-lg shadow;
 }
 
 .productImage {
@@ -39,15 +39,15 @@
 }
 
 .productName {
-  @apply text-xl font-semibold;
+  @apply text-xl font-semibold mb-4;
 }
 
 .productDescription {
-  @apply text-gray-600 mt-2;
+  @apply text-gray-600 mt-4 mb-2;
 }
 
 .productPrice {
-  @apply text-xl font-bold mt-2;
+  @apply text-xl font-bold mt-4;
 }
 
 .quantityControls {

@@ -3,10 +3,11 @@ import { useState } from "react";
 import { Store } from "../../types/stores/Store";
 import { Product } from "../../types/products/Product";
 import { useCart } from "../../contexts/cart/CartContext";
-import { getStoreAndProducts } from "../../lib/data/storeData";
 import Link from "next/link";
 import Image from "next/image";
 import styles from "../../styles/store/StoreDetail.module.css";
+
+const API_URL = "http://localhost:8080/api/v1";
 
 interface StoreDetailProps {
   store: Store | null;
@@ -53,13 +54,17 @@ const StoreDetail: NextPage<StoreDetailProps> = ({ store, products }) => {
       : defaultProductImage;
   };
 
+  const formatPriceToWon = (price: number) => {
+    return price.toLocaleString("ko-KR") + "원";
+  };
+
   return (
     <div className={styles.container}>
       <h1 className={styles.storeHeader}>🍽️ {store.name}</h1>
-      <p className={styles.storeDescription}>{store.description}</p>
+      <p className={styles.storeDescription}>{store.address}</p>
 
       <div className={styles.menuSection}>
-        <h2 className={styles.menuHeader}>🛍️ Menu</h2>
+        <h2 className={styles.menuHeader}>🛍️ menu</h2>
         <Link href="/cart" className={styles.cartButton}>
           Cart ({cartItemsCount})
         </Link>
@@ -67,11 +72,10 @@ const StoreDetail: NextPage<StoreDetailProps> = ({ store, products }) => {
 
       {!isCurrentStore && (
         <div className={styles.warningContainer} role="alert">
-          <p className="font-bold">⚠️ Warning ⚠️</p>
+          <p className="font-bold">⚠️ 주의 ⚠️</p>
           <p>
-            You have items in your cart from another store. Please empty your
-            cart or complete your current order before adding items from this
-            store.
+            다른 가게의 상품이 장바구니에 있습니다. 이 가게의 상품을 추가하려면
+            먼저 장바구니를 비우거나 현재 주문을 완료하세요.
           </p>
         </div>
       )}
@@ -98,7 +102,7 @@ const StoreDetail: NextPage<StoreDetailProps> = ({ store, products }) => {
                   {product.description}
                 </p>
                 <p className={styles.productPrice}>
-                  ${product.price.toFixed(2)}
+                  {formatPriceToWon(product.price)}
                 </p>
               </div>
               <div className={styles.quantityControls}>
@@ -125,13 +129,13 @@ const StoreDetail: NextPage<StoreDetailProps> = ({ store, products }) => {
                 onClick={() => handleAddToCart(product)}
                 disabled={!isCurrentStore}
               >
-                Add to Cart
+                Add to cart
               </button>
             </div>
           ))}
         </div>
       ) : (
-        <p>No products available for this store.</p>
+        <p>이 가게에 상품이 없습니다.</p>
       )}
     </div>
   );
@@ -141,11 +145,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   try {
     const { id } = context.params as { id: string };
 
-    const { store, products } = getStoreAndProducts(id);
+    // Fetching store data
+    const storeResponse = await fetch(`${API_URL}/stores/${id}`);
+    const storeData = await storeResponse.json();
 
-    if (!store) {
-      return { props: { store: null, products: [] } };
-    }
+    const store = storeData.data || null;
+
+    // Fetching products data for the store
+    const productsResponse = await fetch(`${API_URL}/products/stores/${id}`);
+    const productsData = await productsResponse.json();
+
+    const products = productsData.data.content || [];
 
     return { props: { store, products } };
   } catch (error) {

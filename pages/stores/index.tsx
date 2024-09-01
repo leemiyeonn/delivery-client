@@ -4,33 +4,41 @@ import { Store } from "../../types/stores/Store";
 import { Product } from "../../types/products/Product";
 import StoreCard from "../../components/stores/StoreCard";
 import styles from "../../styles/store/Stores.module.css";
-import { getStoresData } from "../../lib/data/storeData";
 import {
-  groupStoresByCategory,
   getStoresForCategory,
   handlePageChange,
 } from "../../utils/stores/StoreUtils";
 
 const ITEMS_PER_PAGE = 3;
+const API_URL = "http://localhost:8080/api/v1";
 
 interface StoresProps {
   stores: Store[];
-  products: Product[];
+  products: Record<string, Product[]>;
 }
 
 const Stores: NextPage<StoresProps> = ({ stores, products }) => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [currentPages, setCurrentPages] = useState<Record<string, number>>({});
 
-  const groupedStores = groupStoresByCategory(stores);
+  // Group stores by their categoryName
+  const groupedStores = stores.reduce(
+    (acc: Record<string, Store[]>, store: Store) => {
+      store.categoryName.forEach((category) => {
+        if (!acc[category]) {
+          acc[category] = [];
+        }
+        acc[category].push(store);
+      });
+      return acc;
+    },
+    {}
+  );
+
   const categories = ["All", ...Object.keys(groupedStores)];
 
   const renderStores = (category: string | null) => {
-    const categoryStores = getStoresForCategory(
-      groupedStores,
-      category,
-      stores
-    );
+    const categoryStores = category ? groupedStores[category] || [] : stores;
     const currentPage = currentPages[category || "All"] || 1;
     const pageCount = Math.ceil(categoryStores.length / ITEMS_PER_PAGE);
     const currentStores = categoryStores.slice(
@@ -38,9 +46,13 @@ const Stores: NextPage<StoresProps> = ({ stores, products }) => {
       currentPage * ITEMS_PER_PAGE
     );
 
+    const categoryEmoji = "🏷️";
+
     return (
       <div className={styles.gridContainer}>
-        <h2 className={styles.gridHeader}>{category || "All Stores"}</h2>
+        <h2 className={styles.gridHeader}>
+          {category ? `${categoryEmoji} ${category}` : "All Stores"}
+        </h2>
         <div className="flex items-center space-x-4">
           <button
             onClick={() =>
@@ -60,12 +72,7 @@ const Stores: NextPage<StoresProps> = ({ stores, products }) => {
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6 flex-grow">
             {currentStores.map((store) => (
               <div key={store.id} className={styles.storeCardWrapper}>
-                <StoreCard
-                  store={store}
-                  products={products.filter(
-                    (product) => product.storeId === store.id
-                  )}
-                />
+                <StoreCard store={store} products={products[store.id] || []} />
               </div>
             ))}
           </div>
@@ -122,11 +129,27 @@ const Stores: NextPage<StoresProps> = ({ stores, products }) => {
 
 export const getServerSideProps: GetServerSideProps = async () => {
   try {
-    const { stores, products } = getStoresData();
-    return { props: { stores, products } };
+    // Stores 데이터 가져오기
+    const storesResponse = await fetch(`${API_URL}/stores`);
+    const storesData = await storesResponse.json();
+
+    // 각 스토어의 제품 데이터 가져오기
+    const products: Record<string, Product[]> = {};
+
+    await Promise.all(
+      storesData.data.content.map(async (store: Store) => {
+        const productsResponse = await fetch(
+          `${API_URL}/products/stores/${store.id}`
+        );
+        const productsData = await productsResponse.json();
+        products[store.id] = productsData.data.content || []; // 빈 배열로 초기화
+      })
+    );
+
+    return { props: { stores: storesData.data.content, products } };
   } catch (error) {
-    console.error("Error reading or parsing stores file:", error);
-    return { props: { stores: [], products: [] } };
+    console.error("Error fetching stores or products data:", error);
+    return { props: { stores: [], products: {} } };
   }
 };
 
