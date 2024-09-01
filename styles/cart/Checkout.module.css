@@ -1,0 +1,74 @@
+.container {
+  @apply max-w-full mx-auto px-4 py-8;
+}
+
+.header {
+  @apply flex justify-between items-center mb-6;
+}
+
+.title {
+  @apply text-3xl font-bold text-gray-800;
+}
+
+.backButton {
+  @apply px-4 py-2 bg-blue-500 text-white rounded text-sm font-medium;
+}
+
+.card {
+  @apply bg-white rounded-lg shadow-md p-6 mb-6 w-full;
+}
+
+.cardTitle {
+  @apply text-2xl font-semibold mb-4;
+}
+
+.input,
+.textarea {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-md;
+}
+
+.input:focus,
+.textarea:focus {
+  @apply outline-none ring-2 ring-blue-500;
+}
+
+.textarea {
+  @apply h-32 resize-none;
+}
+
+.orderItem {
+  @apply flex justify-between items-center py-2 border-b border-gray-200;
+}
+
+.orderItem:last-child {
+  @apply border-b-0;
+}
+
+.itemInfo {
+  @apply flex flex-col mt-2 py-2 px-2;
+}
+
+.itemName {
+  @apply text-lg font-semibold;
+}
+
+.itemQuantity {
+  @apply text-sm text-gray-600;
+}
+
+.itemPrice {
+  @apply font-bold;
+}
+
+.totalPrice {
+  @apply flex justify-between items-center mt-4 pt-4 border-t border-gray-200 font-bold text-xl;
+}
+
+.submitButton {
+  @apply w-full bg-blue-500 text-white py-3 rounded-lg font-semibold
+  hover:bg-blue-600 transition duration-300;
+}
+
+.submitButton:disabled {
+  @apply bg-gray-400 cursor-not-allowed;
+}

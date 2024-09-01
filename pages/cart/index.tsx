@@ -15,17 +15,21 @@ const Cart: NextPage = () => {
   );
 
   const handleCheckout = () => {
-    router.push("/orders");
+    router.push("/cart/checkout");
   };
 
   const handleContinueShopping = () => {
     router.back();
   };
 
+  const formatPriceToWon = (price: number) => {
+    return price.toLocaleString("ko-KR") + "원";
+  };
+
   return (
     <div className={styles.container}>
       <header className={styles.header}>
-        <h1 className={styles.title}>🛒 Your Cart</h1>
+        <h1 className={styles.title}>🛒 Cart</h1>
         <button
           onClick={handleContinueShopping}
           className={styles.continueShoppingButton}
@@ -50,14 +54,14 @@ const Cart: NextPage = () => {
               <div className={styles.totalRow}>
                 <span className={styles.totalText}>Total:</span>
                 <span className={styles.totalPrice}>
-                  ${totalPrice.toFixed(2)}
+                  {formatPriceToWon(totalPrice)}
                 </span>
               </div>
               <button
                 onClick={handleCheckout}
                 className={styles.checkoutButton}
               >
-                Proceed to Checkout
+                Proceed to checkout
               </button>
             </div>
           </div>

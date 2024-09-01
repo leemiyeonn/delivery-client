@@ -22,6 +22,11 @@ const CartProductComponent: React.FC<CartProductProps> = ({
       : defaultProductImage;
   };
 
+  // Function to format number to Korean Won (₩) without decimals
+  const formatPriceToWon = (price: number) => {
+    return price.toLocaleString("ko-KR") + "원";
+  };
+
   return (
     <div className={styles.cartProductContainer}>
       <div className="flex items-center">
@@ -42,7 +47,9 @@ const CartProductComponent: React.FC<CartProductProps> = ({
         <div className={styles.productInfo}>
           <h3 className={styles.productName}>{product.name}</h3>
           <p className={styles.productDescription}>{product.description}</p>
-          <p className={styles.productPrice}>${product.price.toFixed(2)}</p>
+          <p className={styles.productPrice}>
+            {formatPriceToWon(product.price)}
+          </p>
         </div>
         <div className={styles.productControls}>
           <button

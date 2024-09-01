@@ -6,6 +6,7 @@ interface CartContextType {
   addToCart: (product: CartProduct) => void;
   updateQuantity: (id: string, quantity: number) => void;
   removeFromCart: (id: string) => void;
+  clearCart: () => void;
   currentStoreId: string | null;
 }
 
@@ -46,16 +47,25 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   };
 
   const updateQuantity = (id: string, quantity: number) => {
+    if (quantity < 1) return; // Prevent the quantity from going below 1
     setItems((prevItems) =>
       prevItems.map((item) => (item.id === id ? { ...item, quantity } : item))
     );
   };
 
   const removeFromCart = (id: string) => {
-    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
-    if (items.length === 1) {
-      setCurrentStoreId(null);
-    }
+    setItems((prevItems) => {
+      const updatedItems = prevItems.filter((item) => item.id !== id);
+      if (updatedItems.length === 0) {
+        setCurrentStoreId(null);
+      }
+      return updatedItems;
+    });
+  };
+
+  const clearCart = () => {
+    setItems([]);
+    setCurrentStoreId(null);
   };
 
   return (
@@ -65,6 +75,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
         addToCart,
         updateQuantity,
         removeFromCart,
+        clearCart,
         currentStoreId,
       }}
     >
