@@ -35,20 +35,14 @@ const Header: React.FC = () => {
           >
             Cart
           </Link>
-          <Link
-            href="/orders"
-            className="text-lg text-gray-600 hover:text-blue-600 transition duration-300"
-          >
-            Orders
-          </Link>
           {isAuthenticated ? (
             <>
-              {/* <Link
+              <Link
                 href="/profile"
                 className="text-lg text-gray-600 hover:text-blue-600 transition duration-300"
               >
                 Profile
-              </Link> */}
+              </Link>
               <button
                 onClick={handleLogout}
                 className="text-lg text-gray-600 hover:text-blue-600 transition duration-300"
