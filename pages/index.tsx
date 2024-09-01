@@ -7,9 +7,11 @@ const Home: NextPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const router = useRouter();
 
-  const handleSearch = (e: React.FormEvent) => {
+  const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
-    router.push(`/search?query=${encodeURIComponent(searchTerm)}`);
+
+    // 검색어를 포함한 검색 결과 페이지로 리디렉션
+    router.push(`/search?keyword=${encodeURIComponent(searchTerm)}`);
   };
 
   return (

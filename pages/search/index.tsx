@@ -1,88 +1,149 @@
-import React, { useState, useEffect } from "react";
 import { NextPage } from "next";
-import StoreCard from "../../components/stores/StoreCard";
+import { useEffect, useState, useMemo } from "react";
+import { useRouter } from "next/router";
 import { Store } from "../../types/stores/Store";
-import { Product } from "../../types/products/Product";
+import StoreCard from "../../components/stores/StoreCard";
 import styles from "../../styles/store/StoresPage.module.css";
-import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/v1";
-const ITEMS_PER_PAGE = 9;
+// Assume SortOption is defined elsewhere in your code
+type SortOption = "name_asc" | "name_desc" | "date_asc" | "date_desc";
 
-interface StoresPageProps {
-  initialStores: {
-    content: Store[];
-    totalPages: number;
-    totalElements: number;
-    size: number;
-    number: number;
-  };
+interface Pageable {
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
 }
 
-const StoresPage: NextPage<StoresPageProps> = ({ initialStores }) => {
-  const [stores, setStores] = useState(initialStores.content);
-  const [productsMap, setProductsMap] = useState<Record<string, Product[]>>({});
-  const [currentPage, setCurrentPage] = useState(0);
-  const [totalPages, setTotalPages] = useState(initialStores.totalPages);
+interface ApiResponse {
+  data: {
+    content: Store[];
+    pageable: Pageable;
+  };
+  success: string;
+}
 
-  useEffect(() => {
-    fetchStores(currentPage);
-  }, [currentPage]);
+const ITEMS_PER_PAGE = 9;
 
-  useEffect(() => {
-    // 각 스토어에 대한 제품 데이터 가져오기
-    stores.forEach((store) => {
-      fetchProducts(store.id);
-    });
-  }, [stores]);
+const SearchResults: NextPage = () => {
+  const router = useRouter();
+  const { keyword } = router.query;
+  const [stores, setStores] = useState<Store[]>([]);
+  const [pageable, setPageable] = useState<Pageable | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [sortOption, setSortOption] = useState<SortOption>("name_asc");
 
-  const fetchStores = async (page: number) => {
-    try {
-      const response = await axios.get(`${API_URL}/stores`, {
-        params: {
-          page: page,
-          size: ITEMS_PER_PAGE,
-          sort: "name,asc",
-        },
-        withCredentials: true,
-      });
-      setStores(response.data.data.content);
-      setTotalPages(response.data.data.totalPages);
-    } catch (error) {
-      console.error("Error fetching stores:", error);
-    }
+  // Mock functions to be replaced with actual implementation
+  const sortStores = (stores: Store[], sortOption: SortOption) => stores;
+  const calculatePageCount = (stores: Store[], itemsPerPage: number) => {
+    return Math.ceil(stores.length / itemsPerPage);
+  };
+  const paginateStores = (
+    stores: Store[],
+    currentPage: number,
+    itemsPerPage: number
+  ) => {
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return stores.slice(startIndex, startIndex + itemsPerPage);
   };
 
-  const fetchProducts = async (storeId: string) => {
-    try {
-      const response = await axios.get(`${API_URL}/products/stores/${storeId}`);
-      setProductsMap((prev) => ({
-        ...prev,
-        [storeId]: response.data.data.content,
-      }));
-    } catch (error) {
-      console.error(`Error fetching products for store ${storeId}:`, error);
+  useEffect(() => {
+    console.log("Keyword received:", keyword);
+
+    if (keyword) {
+      const fetchStores = async () => {
+        try {
+          const queryParams = new URLSearchParams({
+            keyword: keyword as string,
+            page: (currentPage - 1).toString(), // 0-based page index for the API
+            size: ITEMS_PER_PAGE.toString(),
+            sort: "name,asc",
+          });
+
+          console.log("Query params:", queryParams.toString());
+
+          const response = await fetch(
+            `http://localhost:8080/api/v1/stores?${queryParams.toString()}`
+          );
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch data");
+          }
+
+          const data: ApiResponse = await response.json();
+          console.log("Received data:", data);
+
+          setStores(data.data.content || []); // Ensure stores is never undefined
+          setPageable(data.data.pageable);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchStores();
+    } else {
+      console.log("Keyword is not available");
+      setLoading(false);
     }
+  }, [keyword, currentPage]);
+
+  const sortedStores = useMemo(
+    () => sortStores(stores, sortOption),
+    [stores, sortOption]
+  );
+
+  const pageCount = useMemo(
+    () => calculatePageCount(sortedStores, ITEMS_PER_PAGE),
+    [sortedStores]
+  );
+
+  const currentStores = useMemo(
+    () => paginateStores(sortedStores, currentPage, ITEMS_PER_PAGE),
+    [sortedStores, currentPage]
+  );
+
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortOption(e.target.value as SortOption);
+    setCurrentPage(1); // Reset to first page on sort change
   };
 
   const handlePageChange = (delta: number) => {
-    setCurrentPage((prev) =>
-      Math.max(0, Math.min(totalPages - 1, prev + delta))
-    );
+    setCurrentPage((prev) => Math.max(1, Math.min(pageCount, prev + delta)));
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.title}>🛍️ Stores</h1>
+        <div className={styles.sortContainer}>
+          <label htmlFor="sort" className={styles.sortLabel}></label>
+          <select
+            id="sort"
+            value={sortOption}
+            onChange={handleSortChange}
+            className={styles.sortSelect}
+          >
+            <option value="name_asc">Name (A-Z)</option>
+            <option value="name_desc">Name (Z-A)</option>
+            <option value="date_asc">Date (Oldest first)</option>
+            <option value="date_desc">Date (Newest first)</option>
+          </select>
+        </div>
       </div>
 
       <div className={styles.gridContainer}>
-        {stores.map((store) => (
+        {currentStores.map((store) => (
           <StoreCard
             key={store.id}
             store={store}
-            products={productsMap[store.id] || []} // productsMap에서 해당 스토어의 제품 배열을 전달
+            products={[]} // Assuming products are passed or you can fetch them if necessary
           />
         ))}
       </div>
@@ -90,18 +151,18 @@ const StoresPage: NextPage<StoresPageProps> = ({ initialStores }) => {
       <div className={styles.paginationContainer}>
         <button
           onClick={() => handlePageChange(-1)}
-          disabled={currentPage === 0}
+          disabled={currentPage === 1}
           className={styles.paginationButton}
           aria-label="Previous page"
         >
           &#9664;
         </button>
         <span>
-          Page {currentPage + 1} of {totalPages}
+          Page {currentPage} of {pageCount}
         </span>
         <button
           onClick={() => handlePageChange(1)}
-          disabled={currentPage === totalPages - 1}
+          disabled={currentPage === pageCount}
           className={styles.paginationButton}
           aria-label="Next page"
         >
@@ -112,35 +173,4 @@ const StoresPage: NextPage<StoresPageProps> = ({ initialStores }) => {
   );
 };
 
-export async function getServerSideProps() {
-  try {
-    const response = await axios.get(`${API_URL}/stores`, {
-      params: {
-        page: 0,
-        size: ITEMS_PER_PAGE,
-        sort: "name,asc",
-      },
-      withCredentials: true,
-    });
-    return {
-      props: {
-        initialStores: response.data.data,
-      },
-    };
-  } catch (error) {
-    console.error("Error fetching initial stores:", error);
-    return {
-      props: {
-        initialStores: {
-          content: [],
-          totalPages: 0,
-          totalElements: 0,
-          size: ITEMS_PER_PAGE,
-          number: 0,
-        },
-      },
-    };
-  }
-}
-
-export default StoresPage;
+export default SearchResults;
