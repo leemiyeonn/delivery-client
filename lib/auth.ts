@@ -1,11 +1,9 @@
-import axios, { AxiosInstance } from "axios";
+import createApiClient from "./appClient";
+import Cookies from "js-cookie";
 
-const API_BASE_URL = "http://localhost:8080/api/v1";
+const apiClient = createApiClient();
 
-const apiClient: AxiosInstance = axios.create({
-  baseURL: API_BASE_URL,
-  withCredentials: true, // 쿠키를 포함한 요청을 보내도록 설정
-});
+const AUTHORIZATION_HEADER = "AUTHORIZATION_HEADER"; // 서버에서 기대하는 쿠키 이름
 
 export const login = async (username: string, password: string) => {
   try {
@@ -13,8 +11,24 @@ export const login = async (username: string, password: string) => {
       username,
       password,
     });
-    // 로그인 성공 시 서버에서 자동으로 쿠키를 설정합니다.
-    return response.data;
+
+    if (!response.data || !response.data.token) {
+      console.error("Token not received from the server");
+      return null; // 토큰이 없을 경우 null 반환
+    }
+
+    const { token } = response.data;
+
+    if (token) {
+      // 서버가 기대하는 대로 JWT 토큰을 'Bearer ' 접두사와 함께 쿠키에 저장
+      Cookies.set(AUTHORIZATION_HEADER, `Bearer ${token}`, { expires: 7 });
+      console.log(`Bearer ${token}`);
+      localStorage.setItem("Authorization", token); // 로컬 스토리지에도 저장 (필요한 경우)
+      return token;
+    } else {
+      console.error("Token is undefined");
+      return null; // 토큰이 undefined일 경우 null 반환
+    }
   } catch (error) {
     console.error("Login error:", error);
     throw error;
@@ -23,18 +37,14 @@ export const login = async (username: string, password: string) => {
 
 export const logout = async () => {
   try {
-    // 서버에 로그아웃 요청을 보냅니다.
     await apiClient.post("/auth/logout");
-    // 서버에서 쿠키를 삭제하므로 클라이언트에서 추가 작업이 필요 없습니다.
+    Cookies.remove(AUTHORIZATION_HEADER);
   } catch (error) {
     console.error("Logout error:", error);
     throw error;
   }
 };
 
-// 현재 인증 상태를 확인하는 함수
-// HttpOnly 쿠키이므로 JavaScript에서 직접 확인할 수 없습니다.
-// 대신 서버에 인증 상태를 확인하는 요청을 보냅니다.
 export const checkAuthStatus = async () => {
   try {
     const response = await apiClient.get("/auth/status");

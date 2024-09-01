@@ -12,7 +12,7 @@ const Signup: NextPage = () => {
   const [nickname, setNickname] = useState("");
   const [address, setAddress] = useState("");
   const [request, setRequest] = useState("");
-  const [region, setRegion] = useState("지역"); // Set default region
+  const [region, setRegion] = useState("광화문"); // Set default region
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
@@ -135,7 +135,7 @@ const Signup: NextPage = () => {
               onChange={(e) => setRegion(e.target.value)}
               className={styles.input}
             >
-              <option value="지역">지역</option>
+              <option value="광화문">광화문</option>
               <option value="서비스 지역 추가 예정" disabled>
                 서비스 지역 추가 예정
               </option>

@@ -21,34 +21,26 @@ const Checkout: NextPage = () => {
   const handleSubmitOrder = async () => {
     if (items.length === 0) return;
 
-    const storeId = items[0].storeId; // Assuming all items are from the same store
-
     const orderData = {
-      totalPrice,
-      storeId,
+      storeId: items[0].storeId, // Assuming all items are from the same store
       orderAddress: address,
-      orderRequest,
+      orderRequest: orderRequest,
       orderCategory: "DELIVERY",
-      products: [],
+      orderProducts: items.map((item) => ({
+        productId: item.id,
+        quantity: item.quantity,
+      })),
     };
 
     try {
-      // Step 1: Create the order
-      const orderResponse = await axios.post(`${API_URL}/orders`, orderData);
-      const orderId = orderResponse.data.id; // Assuming the API returns the created order ID
-
-      // Step 2: Add products to the order
-      for (const item of items) {
-        await axios.post(`${API_URL}/orders/${orderId}/products/${item.id}`, {
-          quantity: item.quantity,
-        });
-      }
-
+      const response = await axios.post(`${API_URL}/orders`, orderData);
+      console.log("Order created successfully:", response.data);
       clearCart(); // Clear the cart after successful order
       router.push("/profile/orders"); // Redirect to order history
     } catch (error) {
       console.error("Error submitting order:", error);
-      // Handle error, possibly show an error message to the user
+      // Handle error, show an error message to the user
+      alert("Failed to submit order. Please try again.");
     }
   };
 

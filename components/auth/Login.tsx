@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, FormEvent } from "react";
 import { useAuth } from "../../contexts/auth/AuthContext";
 import { useRouter } from "next/router";
@@ -12,14 +14,11 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      // login 함수를 직접 호출하여 인증 처리
       await login(username, password);
-
-      // 로그인 성공 시 프로필 페이지로 리디렉션
       router.push("/");
     } catch (error) {
       setError(
-        "로그인에 실패했습니다. 아이디과 비밀번호를 확인하고 다시 시도해 주세요."
+        "로그인에 실패했습니다. 아이디와 비밀번호를 확인하고 다시 시도해 주세요."
       );
       console.error("로그인 실패", error);
     }
@@ -32,14 +31,17 @@ const Login: React.FC = () => {
         value={username}
         onChange={(e) => setUsername(e.target.value)}
         placeholder="Username"
+        required
       />
       <input
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
+        required
       />
       <button type="submit">Login</button>
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </form>
   );
 };
