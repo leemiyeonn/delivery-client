@@ -5,6 +5,6 @@ export interface Store extends BaseModel {
   name: string;
   description: string;
   address: string;
-  categoryName: [];
+  categoryName: string[];
   products: Product[];
 }

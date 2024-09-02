@@ -42,10 +42,10 @@ export const calculatePageCount = (
 
 export const groupStoresByCategory = (stores: Store[]) => {
   return stores.reduce((acc, store) => {
-    if (!acc[store.category]) {
-      acc[store.category] = [];
+    if (!acc[store.categoryName[0]]) {
+      acc[store.categoryName[0]] = [];
     }
-    acc[store.category].push(store);
+    acc[store.categoryName[0]].push(store);
     return acc;
   }, {} as Record<string, Store[]>);
 };
