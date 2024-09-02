@@ -54,18 +54,20 @@ const SearchResults: NextPage = () => {
     if (keyword) {
       const fetchStores = async () => {
         try {
-          const queryParams = new URLSearchParams({
-            keyword: keyword as string,
-            page: (currentPage - 1).toString(), // 0-based page index for the API
-            size: ITEMS_PER_PAGE.toString(),
-            sort: "name,asc",
-          });
+          let url = `http://localhost:8080/api/v1/stores`;
+          if (pageable?.totalPages !== 0) {
+            const queryParams = new URLSearchParams({
+              keyword: keyword as string,
+              page: (currentPage - 1).toString(), // 0-based page index for the API
+              size: ITEMS_PER_PAGE.toString(),
+              sort: sortOption.replace("_", ","),
+            });
+            url += `?${queryParams.toString()}`;
+          }
 
-          console.log("Query params:", queryParams.toString());
+          console.log("Fetching URL:", url);
 
-          const response = await fetch(
-            `http://localhost:8080/api/v1/stores?${queryParams.toString()}`
-          );
+          const response = await fetch(url);
 
           if (!response.ok) {
             throw new Error("Failed to fetch data");
@@ -88,7 +90,7 @@ const SearchResults: NextPage = () => {
       console.log("Keyword is not available");
       setLoading(false);
     }
-  }, [keyword, currentPage]);
+  }, [keyword, currentPage, sortOption]);
 
   const sortedStores = useMemo(
     () => sortStores(stores, sortOption),

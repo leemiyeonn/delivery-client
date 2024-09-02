@@ -1,27 +1,26 @@
-import createApiClient from "./appClient";
 import axios from "axios";
 
-const apiClient = createApiClient();
-
+const API_BASE_URL = "http://localhost:8080/api/v1";
 const AUTHORIZATION_HEADER = "Authorization";
 
+// 로그인 함수
 export const login = async (username: string, password: string) => {
   try {
     const response = await axios.post(
-      "http://localhost:8080/api/v1/auth/signIn",
+      `${API_BASE_URL}/auth/signIn`,
       { username, password },
-      { withCredentials: true }
+      { withCredentials: false }
     );
 
     // 응답 헤더에서 Authorization 읽기
-    const token = response.headers["authorization"];
+    const token = response.headers[AUTHORIZATION_HEADER.toLowerCase()];
     if (token) {
       console.log("Token:", token);
-      localStorage.setItem("Authorization", token); // 로컬 스토리지에 저장
+      localStorage.setItem(AUTHORIZATION_HEADER, token); // 로컬 스토리지에 저장
       return token;
     } else {
       console.error("Token is not found in headers");
-      return null; // 토큰이 없을 경우 null 반환
+      return null;
     }
   } catch (error) {
     console.error("Login error:", error);
@@ -29,11 +28,12 @@ export const login = async (username: string, password: string) => {
   }
 };
 
+// 로그아웃 함수
 export const logout = async () => {
   try {
     // 서버에 로그아웃 요청 보내기
     const _ = await axios.post(
-      "http://localhost:8080/api/v1/auth/logout",
+      `${API_BASE_URL}/auth/logout`,
       {},
       { withCredentials: true }
     );
@@ -46,15 +46,5 @@ export const logout = async () => {
   } catch (error) {
     console.error("Logout error:", error);
     throw error;
-  }
-};
-
-export const checkAuthStatus = async () => {
-  try {
-    const response = await apiClient.get("/auth/status");
-    return response.data.isAuthenticated;
-  } catch (error) {
-    console.error("Auth status check error:", error);
-    return false;
   }
 };

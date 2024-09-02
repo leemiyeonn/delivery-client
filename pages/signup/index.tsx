@@ -32,7 +32,7 @@ const Signup: NextPage = () => {
           nickname,
           address,
           request,
-          role: "ADMIN",
+          role: "USER",
           regionName: region, // Send the selected region
         }),
       });
@@ -111,20 +111,7 @@ const Signup: NextPage = () => {
               required
             />
           </div>
-          <div className={styles.inputWrapper}>
-            <label htmlFor="request" className={styles.label}>
-              Request
-            </label>
-            <input
-              id="request"
-              type="text"
-              value={request}
-              onChange={(e) => setRequest(e.target.value)}
-              className={styles.input}
-              placeholder="Enter your request"
-              required
-            />
-          </div>
+
           <div className={styles.inputWrapper}>
             <label htmlFor="region" className={styles.label}>
               Region

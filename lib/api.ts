@@ -4,7 +4,7 @@ const API_BASE_URL = "http://localhost:8080/api/v1";
 
 const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
-  withCredentials: true, // 쿠키를 포함한 요청을 보내도록 설정
+  withCredentials: false,
 });
 
 apiClient.interceptors.response.use(
@@ -13,7 +13,7 @@ apiClient.interceptors.response.use(
     if (error.response && error.response.status === 401) {
       // 토큰이 유효하지 않거나 만료된 경우 처리
       console.error("Unauthorized, logging out...");
-      localStorage.removeItem("authToken");
+      localStorage.removeItem("Authorization");
       // 필요 시 로그인 화면으로 리디렉션
       window.location.href = "/login";
     }

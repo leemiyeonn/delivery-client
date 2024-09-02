@@ -5,11 +5,9 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import {
-  login as apiLogin,
-  checkAuthStatus,
-  logout as apiLogout,
-} from "../../lib/auth";
+import { login as apiLogin, logout as apiLogout } from "../../lib/auth";
+
+const AUTHORIZATION_HEADER = "Authorization"; // 로컬 스토리지에 저장된 토큰의 키
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -25,9 +23,13 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const [isAuth, setIsAuth] = useState<boolean>(false);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const status = await checkAuthStatus();
-      setIsAuth(status);
+    const checkAuth = () => {
+      const token = localStorage.getItem(AUTHORIZATION_HEADER);
+      if (token) {
+        setIsAuth(true);
+      } else {
+        setIsAuth(false);
+      }
     };
     checkAuth();
   }, []);
@@ -45,6 +47,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   const logout = async () => {
     try {
       await apiLogout();
+      localStorage.removeItem(AUTHORIZATION_HEADER); // 로그아웃 시 로컬 스토리지에서 토큰 삭제
       setIsAuth(false);
     } catch (error) {
       console.error("Logout failed:", error);
