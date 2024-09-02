@@ -5,7 +5,7 @@ import { Order } from "../../types/orders/Order";
 export async function getOrderData(orderId: string): Promise<Order | null> {
   try {
     const response = await fetch(
-      `http://localhost:8080/api/v1/orders/${orderId}`
+      `https://gunwoo.store/api/v1/orders/${orderId}`
     );
     const data = await response.json();
 

@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import styles from "../../styles/auth/SignUp.module.css";
 
-const SIGNUP_API_URL = "http://localhost:8080/api/v1/auth/signUp";
+const SIGNUP_API_URL = "https://gunwoo.store/api/v1/auth/signUp";
 
 const Signup: NextPage = () => {
   const [username, setUsername] = useState("");

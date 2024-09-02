@@ -10,7 +10,7 @@ import {
 } from "../../utils/stores/StoreUtils";
 
 const ITEMS_PER_PAGE = 3;
-const API_URL = "http://localhost:8080/api/v1";
+const API_URL = "https://gunwoo.store/api/v1";
 
 interface StoresProps {
   stores: Store[];

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080/api/v1";
+const API_BASE_URL = "https://gunwoo.store/api/v1";
 const AUTHORIZATION_HEADER = "Authorization";
 
 // 로그인 함수

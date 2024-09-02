@@ -54,7 +54,7 @@ const SearchResults: NextPage = () => {
     if (keyword) {
       const fetchStores = async () => {
         try {
-          let url = `http://localhost:8080/api/v1/stores`;
+          let url = `https://gunwoo.store/api/v1/stores`;
           if (pageable?.totalPages !== 0) {
             const queryParams = new URLSearchParams({
               keyword: keyword as string,

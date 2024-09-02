@@ -7,7 +7,7 @@ import Link from "next/link";
 import Image from "next/image";
 import styles from "../../styles/store/StoreDetail.module.css";
 
-const API_URL = "http://localhost:8080/api/v1";
+const API_URL = "https://gunwoo.store/api/v1";
 
 interface StoreDetailProps {
   store: Store | null;
