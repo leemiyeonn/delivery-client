@@ -5,7 +5,11 @@ import React, {
   useEffect,
   ReactNode,
 } from "react";
-import { login as apiLogin, checkAuthStatus } from "../../lib/auth";
+import {
+  login as apiLogin,
+  checkAuthStatus,
+  logout as apiLogout,
+} from "../../lib/auth";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -40,19 +44,11 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 
   const logout = async () => {
     try {
-      const response = await fetch("/api/logout", {
-        method: "POST",
-        credentials: "include", // 쿠키를 포함하여 요청 보내기
-      });
-
-      if (!response.ok) {
-        throw new Error("Logout failed");
-      }
-
+      await apiLogout();
       setIsAuth(false);
-      window.location.href = "/";
     } catch (error) {
       console.error("Logout failed:", error);
+      throw error;
     }
   };
 

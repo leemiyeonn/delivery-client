@@ -1,33 +1,27 @@
 import createApiClient from "./appClient";
-import Cookies from "js-cookie";
+import axios from "axios";
 
 const apiClient = createApiClient();
 
-const AUTHORIZATION_HEADER = "AUTHORIZATION_HEADER"; // 서버에서 기대하는 쿠키 이름
+const AUTHORIZATION_HEADER = "Authorization";
 
 export const login = async (username: string, password: string) => {
   try {
-    const response = await apiClient.post("/auth/signIn", {
-      username,
-      password,
-    });
+    const response = await axios.post(
+      "http://localhost:8080/api/v1/auth/signIn",
+      { username, password },
+      { withCredentials: true }
+    );
 
-    if (!response.data || !response.data.token) {
-      console.error("Token not received from the server");
-      return null; // 토큰이 없을 경우 null 반환
-    }
-
-    const { token } = response.data;
-
+    // 응답 헤더에서 Authorization 읽기
+    const token = response.headers["authorization"];
     if (token) {
-      // 서버가 기대하는 대로 JWT 토큰을 'Bearer ' 접두사와 함께 쿠키에 저장
-      Cookies.set(AUTHORIZATION_HEADER, `Bearer ${token}`, { expires: 7 });
-      console.log(`Bearer ${token}`);
-      localStorage.setItem("Authorization", token); // 로컬 스토리지에도 저장 (필요한 경우)
+      console.log("Token:", token);
+      localStorage.setItem("Authorization", token); // 로컬 스토리지에 저장
       return token;
     } else {
-      console.error("Token is undefined");
-      return null; // 토큰이 undefined일 경우 null 반환
+      console.error("Token is not found in headers");
+      return null; // 토큰이 없을 경우 null 반환
     }
   } catch (error) {
     console.error("Login error:", error);
@@ -37,8 +31,18 @@ export const login = async (username: string, password: string) => {
 
 export const logout = async () => {
   try {
-    await apiClient.post("/auth/logout");
-    Cookies.remove(AUTHORIZATION_HEADER);
+    // 서버에 로그아웃 요청 보내기
+    const _ = await axios.post(
+      "http://localhost:8080/api/v1/auth/logout",
+      {},
+      { withCredentials: true }
+    );
+
+    // 로컬 스토리지에서 토큰 삭제
+    localStorage.removeItem(AUTHORIZATION_HEADER);
+
+    // 홈으로 리다이렉트
+    window.location.href = "/";
   } catch (error) {
     console.error("Logout error:", error);
     throw error;
