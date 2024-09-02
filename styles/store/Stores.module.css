@@ -33,12 +33,12 @@
 
 /* Grid Container */
 .gridContainer {
-  @apply mb-8;
+  @apply mb-16;
 }
 
 /* Grid Header */
 .gridHeader {
-  @apply text-2xl font-bold mb-4;
+  @apply text-lg font-bold mb-4;
 }
 
 /* Grid Navigation Button */

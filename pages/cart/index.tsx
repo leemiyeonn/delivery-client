@@ -19,7 +19,7 @@ const Cart: NextPage = () => {
   };
 
   const handleContinueShopping = () => {
-    router.back();
+    router.push("/stores");
   };
 
   const formatPriceToWon = (price: number) => {

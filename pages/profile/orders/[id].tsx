@@ -1,8 +1,8 @@
-import { NextPage, GetStaticProps, GetStaticPaths } from "next";
+import { NextPage, GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import OrderSummary from "../../../components/orders/OrderSummary";
 import { Order } from "../../../types/orders/Order";
-import { getOrdersData, getOrderData } from "../../../lib/data/orderData";
+import { getOrderData } from "../../../lib/data/orderData";
 import styles from "../../../styles/order/OrderDetail.module.css";
 
 interface OrderDetailProps {
@@ -16,17 +16,10 @@ const OrderDetail: NextPage<OrderDetailProps> = ({ order }) => {
     return <div>Order not found</div>;
   }
 
-  const handleBackClick = () => {
-    router.back();
-  };
-
   return (
     <div className={styles.container}>
       <div className={styles.header}>
         <h1 className={styles.heading}> 🏷️ Order Details </h1>
-        <button onClick={handleBackClick} className={styles.backButton}>
-          Back to Orders
-        </button>
       </div>
       <div className={styles.card}>
         <OrderSummary order={order} />
@@ -35,21 +28,16 @@ const OrderDetail: NextPage<OrderDetailProps> = ({ order }) => {
   );
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const orders = getOrdersData();
-  const paths = orders.map((order) => ({
-    params: { id: order.id.toString() },
-  }));
-  return { paths, fallback: false };
-};
-
-export const getStaticProps: GetStaticProps<OrderDetailProps> = async ({
+export const getServerSideProps: GetServerSideProps<OrderDetailProps> = async ({
   params,
 }) => {
-  const order = getOrderData(params?.id as string);
+  const orderId = params?.id as string;
+  const order = await getOrderData(orderId);
+
   if (!order) {
     return { notFound: true };
   }
+
   return { props: { order } };
 };
 

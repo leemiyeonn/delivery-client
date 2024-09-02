@@ -1,8 +1,7 @@
 import { NextPage, GetStaticProps } from "next";
 import Link from "next/link";
 import { Order } from "../../../types/orders/Order";
-import { getOrdersData } from "../../../lib/data/orderData";
-import styles from "../../styles/order/Orders.module.css";
+import styles from "../../../styles/order/Orders.module.css";
 
 interface OrdersProps {
   orders: Order[];
@@ -14,16 +13,17 @@ const Orders: NextPage<OrdersProps> = ({ orders }) => {
       <h1 className={styles.heading}>🏷️ Your Orders</h1>
       <div className={styles.grid}>
         {orders.map((order) => (
-          <Link href={`/orders/${order.id}`} key={order.id} passHref>
+          <Link href={`/orders/${order.orderId}`} key={order.orderId} passHref>
             <div className={styles.card}>
               <div className={styles.cardHeader}>
-                <h2 className={styles.orderId}>Order #{order.id}</h2>
+                <h2 className={styles.orderId}>Order #{order.orderId}</h2>
                 <span
                   className={`${styles.statusBadge} ${
-                    styles[`status${order.status}`] || styles.statusBadgeDefault
+                    styles[`status${order.orderStatus}`] ||
+                    styles.statusBadgeDefault
                   }`}
                 >
-                  {order.status}
+                  {order.orderStatus}
                 </span>
               </div>
               <div className={styles.orderDetails}>
@@ -33,11 +33,11 @@ const Orders: NextPage<OrdersProps> = ({ orders }) => {
                 </div>
                 <div className={styles.orderDetail}>
                   <span className={styles.orderDetailLabel}>Total:</span> $
-                  {order.total.toFixed(2)}
+                  {order.totalPrice}
                 </div>
                 <div className={styles.orderDetail}>
                   <span className={styles.orderDetailLabel}>Date:</span>{" "}
-                  {new Date(order.orderDate).toLocaleDateString()}
+                  {new Date(order.createdAt).toLocaleDateString()}
                 </div>
               </div>
             </div>
@@ -46,11 +46,6 @@ const Orders: NextPage<OrdersProps> = ({ orders }) => {
       </div>
     </div>
   );
-};
-
-export const getStaticProps: GetStaticProps<OrdersProps> = async () => {
-  const orders = getOrdersData();
-  return { props: { orders } };
 };
 
 export default Orders;

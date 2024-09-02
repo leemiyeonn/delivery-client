@@ -2,10 +2,10 @@ import { useState } from "react";
 import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useCart } from "../../contexts/cart/CartContext";
-import axios from "axios";
+import createApiClient from "../../lib/appClient";
 import styles from "../../styles/cart/Checkout.module.css";
 
-const API_URL = "http://localhost:8080/api/v1";
+const apiClient = createApiClient(); // API 클라이언트 인스턴스 생성
 
 const Checkout: NextPage = () => {
   const { items, clearCart } = useCart();
@@ -22,7 +22,7 @@ const Checkout: NextPage = () => {
     if (items.length === 0) return;
 
     const orderData = {
-      storeId: items[0].storeId, // Assuming all items are from the same store
+      storeId: items[0].storeId,
       orderAddress: address,
       orderRequest: orderRequest,
       orderCategory: "DELIVERY",
@@ -33,10 +33,16 @@ const Checkout: NextPage = () => {
     };
 
     try {
-      const response = await axios.post(`${API_URL}/orders`, orderData);
+      const response = await apiClient.post("/orders", orderData);
       console.log("Order created successfully:", response.data);
       clearCart(); // Clear the cart after successful order
-      router.push("/profile/orders"); // Redirect to order history
+
+      // 주문이 완료되면 알림창 표시
+      alert("주문이 완료되었습니다!");
+
+      // 주문 상세 페이지로 리디렉션
+      const orderId = response.data.data.orderId; // 백엔드에서 받은 주문 ID
+      router.push(`/profile/orders/${orderId}`);
     } catch (error) {
       console.error("Error submitting order:", error);
       // Handle error, show an error message to the user
