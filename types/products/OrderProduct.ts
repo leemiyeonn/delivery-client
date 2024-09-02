@@ -1,5 +1,6 @@
-import { BaseProduct } from "./BaseProduct";
-
-export interface OrderProduct extends BaseProduct {
+export interface OrderProduct {
+  productId: string;
+  productName: string;
   quantity: number;
+  price: number;
 }

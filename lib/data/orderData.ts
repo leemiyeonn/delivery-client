@@ -2,19 +2,19 @@ import path from "path";
 import fs from "fs";
 import { Order } from "../../types/orders/Order";
 
-const ordersFilePath = path.join(
-  process.cwd(),
-  "public",
-  "data",
-  "orders.json"
-);
+export async function getOrderData(orderId: string): Promise<Order | null> {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/v1/orders/${orderId}`
+    );
+    const data = await response.json();
 
-export const getOrdersData = (): Order[] => {
-  const ordersFileContents = fs.readFileSync(ordersFilePath, "utf8");
-  return JSON.parse(ordersFileContents);
-};
-
-export const getOrderData = (id: string): Order | undefined => {
-  const orders = getOrdersData();
-  return orders.find((order) => order.id === id);
-};
+    if (data.success && data.data) {
+      return data.data;
+    }
+    return null;
+  } catch (error) {
+    console.error("Failed to fetch order data:", error);
+    return null;
+  }
+}
